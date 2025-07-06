@@ -1,0 +1,16 @@
+{
+  "name": "vkit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "pnpm run clean:dist && pnpm run clean:modules",
+    "clean:modules": "rimraf node_modules && rimraf ./node_modules",
+    "clean:dist": "rimraf .cache build dist .hash",
+    "reset": "pnpm run clean:modules && pnpm i"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.4"
+}
