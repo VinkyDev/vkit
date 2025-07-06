@@ -20,9 +20,9 @@ function createWindow() {
   });
   console.log("VITE_DEV_SERVER_URL", VITE_DEV_SERVER_URL);
   if (VITE_DEV_SERVER_URL) {
-    win.loadURL(VITE_DEV_SERVER_URL);
+    void win.loadURL(VITE_DEV_SERVER_URL);
   } else {
-    win.loadFile(path.join(RENDERER_DIST, "index.html"));
+    void win.loadFile(path.join(RENDERER_DIST, "index.html"));
   }
 }
 app.on("window-all-closed", () => {
@@ -36,7 +36,7 @@ app.on("activate", () => {
     createWindow();
   }
 });
-app.whenReady().then(createWindow);
+void app.whenReady().then(createWindow);
 export {
   MAIN_DIST,
   RENDERER_DIST,

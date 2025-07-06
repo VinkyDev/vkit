@@ -3,27 +3,65 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "clean": "pnpm run clean:dist && pnpm run clean:modules",
     "clean:modules": "rimraf node_modules && rimraf ./node_modules",
     "clean:dist": "rimraf .cache build dist .hash",
-    "install electron": "node ./apps/electron/node_modules/electron/install.js",
+    "install:electron": "node ./apps/electron/node_modules/electron/install.js",
     "reset": "pnpm run clean:modules && pnpm i",
     "dev:react": "pnpm --filter react dev",
     "dev:electron": "pnpm --filter electron dev",
     "build:react": "pnpm --filter react build",
     "build:electron": "pnpm --filter electron build",
     "dev": "run-p dev:react dev:electron:after",
-    "dev:electron:after": "wait-on http://localhost:5173 && pnpm dev:electron"
+    "dev:electron:after": "wait-on http://localhost:5173 && pnpm dev:electron",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "lint:staged": "eslint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "format:staged": "prettier --write",
+    "check": "pnpm run lint && pnpm run format:check",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "pnpm run lint:staged",
+      "pnpm run format:staged"
+    ],
+    "*.{json,md,css,scss,html}": [
+      "pnpm run format:staged"
+    ]
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.12.4",
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
   "devDependencies": {
-    "npm-run-all": "^4.1.5", 
+    "npm-run-all": "^4.1.5",
     "typescript": "^5.8.3",
     "vite": "^7.0.0",
-    "wait-on": "^8.0.3"
+    "wait-on": "^8.0.3",
+    "@eslint/js": "^9.29.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react-swc": "^3.10.2",
+    "eslint": "^9.29.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.2.0",
+    "typescript-eslint": "^8.34.1",
+    "@eslint-react/eslint-plugin": "^1.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.4.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.11",
+    "@commitlint/cli": "^19.6.1",
+    "@commitlint/config-conventional": "^19.6.1"
   }
 }
