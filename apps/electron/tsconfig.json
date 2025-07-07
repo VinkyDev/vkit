@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.web.json",
+  "extends": "../../tsconfig.node.json",
   "compilerOptions": {
     "target": "ES2020",
     "lib": ["ES2020", "DOM", "DOM.Iterable"]

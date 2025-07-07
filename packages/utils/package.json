@@ -1,0 +1,14 @@
+{
+  "name": "@vkit/utils",
+  "private": true,
+  "version": "0.0.0",
+  "main": "src/index.ts",
+  "module": "./src/index.ts",
+  "typings": "./src/index.ts",
+  "type": "module",
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.3.1"
+  }
+}

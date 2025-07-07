@@ -1,0 +1,11 @@
+{
+  "id": "json-editor",
+  "name": "JSON 编辑器",
+  "description": "JSON 编辑器",
+  "version": "1.0.0",
+  "type": "buildin",
+  "icon": "./icon.svg",
+  "tags": [
+    "json"
+  ]
+}
