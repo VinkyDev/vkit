@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import JSONEditor, { type JSONEditorRef } from './components/JSONEditor';
+import { PLUGIN_VIEW_HEIGHT } from '@vkit/constants';
 
 function App() {
   const [jsonValue, setJsonValue] = useState('{}');
@@ -7,8 +8,8 @@ function App() {
   const editorRef = useRef<JSONEditorRef>(null);
 
   return (
-    <main className='max-w-4xl mx-auto px-4 py-6'>
-      <JSONEditor ref={editorRef} value={jsonValue} onChange={setJsonValue} height='500px' />
+    <main style={{ height: PLUGIN_VIEW_HEIGHT }}>
+      <JSONEditor ref={editorRef} value={jsonValue} onChange={setJsonValue} />
     </main>
   );
 }

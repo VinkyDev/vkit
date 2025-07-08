@@ -1,4 +1,5 @@
 import { is } from '@electron-toolkit/utils';
+import { WINDOW_WIDTH } from '@vkit/constants';
 import { BrowserWindow, shell } from 'electron';
 import { join } from 'path';
 let mainWindow: BrowserWindow | null = null;
@@ -15,13 +16,14 @@ export function getMainWindow() {
 
 export function createMainWindow(): void {
   const win = (mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: WINDOW_WIDTH,
+    height: 600,
     autoHideMenuBar: true,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
       contextIsolation: true,
+      nodeIntegration: true
     },
   }));
 
@@ -35,7 +37,7 @@ export function createMainWindow(): void {
   });
 
   if (is.dev) {
-    win.loadURL('http://localhost:5173');
+    win.loadURL('http://localhost:9900');
   } else {
     win.loadFile(join(__dirname, '../renderer/index.html'));
   }

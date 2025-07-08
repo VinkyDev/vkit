@@ -33,7 +33,7 @@ const JSONEditor = forwardRef<JSONEditorRef, JSONEditorProps>(
     {
       value = '',
       onChange,
-      height = '400px',
+      height,
       width = '100%',
       readOnly = false,
       lineNumbers = true,
@@ -169,7 +169,7 @@ const JSONEditor = forwardRef<JSONEditorRef, JSONEditorProps>(
     }, [value, editorValue]);
 
     return (
-      <div className='relative overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm'>
+      <div className='w-full h-full relative overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm'>
         <Editor
           height={height}
           width={width}
