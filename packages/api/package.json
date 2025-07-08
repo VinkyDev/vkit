@@ -1,0 +1,21 @@
+{
+  "name": "@vkit/api",
+  "private": true,
+  "version": "0.0.0",
+  "main": "src/index.ts",
+  "module": "./src/index.ts",
+  "typings": "./src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "require": "./src/index.ts",
+      "types": "./src/index.ts",
+      "build": "./dist/index.mjs"
+    }
+  }
+}

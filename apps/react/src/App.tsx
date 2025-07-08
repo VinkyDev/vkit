@@ -1,3 +1,4 @@
+import { setWindowSize } from '@vkit/api';
 import { Search, Lock, Code, Palette, Globe, Leaf, FileJson, Compass } from 'lucide-react';
 
 const tools = [
@@ -15,7 +16,10 @@ export default function App() {
   return (
     <div className='w-full rounded-2xl bg-gradient-to-b from-[#0f1120] to-[#0c0e1a] p-4 shadow-2xl text-white space-y-4'>
       <div className='rounded-xl bg-[#1e2235] px-4 py-2 flex items-center space-x-2'>
-        <div className='w-6 h-6 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-sm font-bold'>
+        <div
+          className='w-6 h-6 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-sm font-bold'
+          onClick={() => setWindowSize({ width: 1200, height: 800 })}
+        >
           V
         </div>
         <input

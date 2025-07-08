@@ -40,7 +40,9 @@
   "license": "ISC",
   "packageManager": "pnpm@10.12.4",
   "dependencies": {
+    "@electron-toolkit/preload": "^3.0.1",
     "@vkit/utils": "workspace:*",
+    "@vkit/api": "workspace:*",
     "lucide-react": "^0.525.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"

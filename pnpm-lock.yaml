@@ -8,6 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@electron-toolkit/preload':
+        specifier: ^3.0.1
+        version: 3.0.2(electron@37.2.0)
+      '@vkit/api':
+        specifier: workspace:*
+        version: link:packages/api
       '@vkit/utils':
         specifier: workspace:*
         version: link:packages/utils
@@ -117,9 +123,6 @@ importers:
 
   apps/electron:
     dependencies:
-      '@electron-toolkit/preload':
-        specifier: ^3.0.1
-        version: 3.0.2(electron@37.2.0)
       '@electron-toolkit/utils':
         specifier: ^4.0.0
         version: 4.0.0(electron@37.2.0)
@@ -156,6 +159,8 @@ importers:
       monaco-editor:
         specifier: ^0.52.2
         version: 0.52.2
+
+  packages/api: {}
 
   packages/utils:
     dependencies:

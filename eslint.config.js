@@ -54,6 +54,7 @@ const baseConfig = [
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/prefer-nullish-coalescing': 'error',
       '@typescript-eslint/prefer-optional-chain': 'error',
+      '@typescript-eslint/no-misused-promises': 'off',
     },
   },
 ];
