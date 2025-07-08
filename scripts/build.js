@@ -4,7 +4,7 @@ import { cpSync, rmSync, existsSync } from 'fs';
 import path from 'path';
 
 const reactDist = path.resolve('apps/react/dist');
-const electronDistTarget = path.resolve('apps/electron/dist');
+const electronDistTarget = path.resolve('apps/electron/out/renderer');
 
 function log(message) {
   console.log(`\n✅ ${message}`);

@@ -17,6 +17,7 @@ const globalIgnores = {
     '**/dist-electron/**',
     '**/*.min.js',
     '**/public/**/*.js',
+    '**/out/**',
   ],
 };
 
@@ -101,9 +102,10 @@ const electronConfig = [
     },
     rules: {
       // Electron特定规则
-      'no-console': 'off', // Electron主进程可以使用console
-      '@typescript-eslint/no-var-requires': 'off', // Electron可能需要require
+      'no-console': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
       '@typescript-eslint/consistent-type-imports': 'off',
+      '@typescript-eslint/no-floating-promises': 'off',
 
       // Node.js最佳实践
       'n/prefer-global/process': 'off',
