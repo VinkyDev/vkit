@@ -7,3 +7,4 @@ export const PLUGIN_VIEW_HEIGHT = 540; // 插件视图高度
 
 export const WINDOW_WIDTH = 780; // 窗口宽度
 
+export const TOOLBAR_HEIGHT = 40; // 工具栏高度

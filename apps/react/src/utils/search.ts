@@ -14,7 +14,7 @@ export interface SearchResult {
 function fuzzyMatchName(query: string, name: string): number {
   const queryLower = query.toLowerCase();
   const nameLower = name.toLowerCase();
-  
+
   if (nameLower.includes(queryLower)) {
     // 完全包含，根据匹配位置和长度计算分数
     const index = nameLower.indexOf(queryLower);
@@ -22,7 +22,7 @@ function fuzzyMatchName(query: string, name: string): number {
     const positionScore = index === 0 ? 1 : 0.8; // 开头匹配得分更高
     return lengthRatio * positionScore * 10;
   }
-  
+
   // 字符逐个匹配
   let matchCount = 0;
   let lastIndex = -1;
@@ -33,11 +33,11 @@ function fuzzyMatchName(query: string, name: string): number {
       lastIndex = index;
     }
   }
-  
+
   if (matchCount === queryLower.length) {
     return (matchCount / nameLower.length) * 5;
   }
-  
+
   return 0;
 }
 
@@ -58,14 +58,17 @@ function pinyinMatch(query: string, name: string): number {
 /**
  * 特殊规则匹配
  */
-function specialRuleMatch(query: string, plugin: IPluginManifest): { score: number; rule?: string } {
+function specialRuleMatch(
+  query: string,
+  plugin: IPluginManifest
+): { score: number; rule?: string } {
   if (!plugin.matchRules || plugin.matchRules.length === 0) {
     return { score: 0 };
   }
-  
+
   let maxScore = 0;
   let matchedRule = '';
-  
+
   for (const rule of plugin.matchRules) {
     try {
       const regex = new RegExp(rule.pattern, 'i');
@@ -80,7 +83,7 @@ function specialRuleMatch(query: string, plugin: IPluginManifest): { score: numb
       console.warn(`Invalid regex pattern: ${rule.pattern}`, error);
     }
   }
-  
+
   return { score: maxScore, rule: matchedRule };
 }
 
@@ -91,41 +94,36 @@ export function searchPlugins(query: string, plugins: IPluginManifest[]): Search
   if (!query.trim()) {
     return [];
   }
-  
+
   const results: SearchResult[] = [];
-  
+
   for (const plugin of plugins) {
-    if (!plugin.allowSearch) {
-      continue;
-    }
-    
     const nameScore = fuzzyMatchName(query, plugin.name);
     const pinyinScore = pinyinMatch(query, plugin.name);
     const { score: specialScore, rule: matchedRule } = specialRuleMatch(query, plugin);
-    
-    // 选择最高分数的匹配类型
+
     let maxScore = 0;
     let matchType: 'name' | 'pinyin' | 'special' = 'name';
-    
+
     if (nameScore > maxScore) {
       maxScore = nameScore;
       matchType = 'name';
     }
-    
+
     if (pinyinScore > maxScore) {
       maxScore = pinyinScore;
       matchType = 'pinyin';
     }
-    
+
     if (specialScore > maxScore) {
       maxScore = specialScore;
       matchType = 'special';
     }
-    
+
     // 应用插件基础权重
     const baseWeight = plugin.weight ?? 1;
     const finalScore = maxScore * baseWeight;
-    
+
     if (finalScore > 0) {
       results.push({
         plugin,
@@ -135,7 +133,7 @@ export function searchPlugins(query: string, plugins: IPluginManifest[]): Search
       });
     }
   }
-  
+
   // 按分数降序排列
   return results.sort((a, b) => b.score - a.score);
-} 
+}

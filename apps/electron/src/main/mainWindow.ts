@@ -19,11 +19,13 @@ export function createMainWindow(): void {
     width: WINDOW_WIDTH,
     height: 600,
     autoHideMenuBar: true,
+    frame: false,
+    skipTaskbar: true,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
       contextIsolation: true,
-      nodeIntegration: true
+      nodeIntegration: true,
     },
   }));
 

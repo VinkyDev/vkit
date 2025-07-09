@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import JSONEditor from './components/JSONEditor';
-import { PLUGIN_VIEW_HEIGHT } from '@vkit/constants';
 import { usePluginInitData, useSearchInput } from '@vkit/hooks';
 import { formatJSON, isValidJSON } from '@vkit/utils';
 
@@ -28,7 +27,7 @@ function App() {
   };
 
   return (
-    <main style={{ height: PLUGIN_VIEW_HEIGHT }}>
+    <main className="h-full w-full">
       {hasSearchValue && (
         <div className='bg-blue-50 px-3 py-2 text-sm text-blue-700 border-b border-blue-200'>
           搜索内容: {searchValue}

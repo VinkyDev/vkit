@@ -8,7 +8,6 @@ interface PluginGridProps {
 }
 
 export default function PluginGrid({ plugins, onPluginSelect, searchQuery }: PluginGridProps) {
-
   const displayPlugins = searchQuery?.trim()
     ? searchPlugins(searchQuery, plugins).map(result => result.plugin)
     : plugins;
@@ -21,18 +20,19 @@ export default function PluginGrid({ plugins, onPluginSelect, searchQuery }: Plu
           className='flex flex-col items-center justify-center bg-gray-50/80 p-4 rounded-xl hover:bg-gray-200/80 transition-colors cursor-pointer border border-gray-200/50 shadow-sm'
           onClick={() => onPluginSelect(plugin, searchQuery)}
         >
-          <img 
-            className='w-8 h-8 mb-2' 
-            src={plugin.iconUrl} 
+          <img
+            className='w-8 h-8 mb-2'
+            src={plugin.icon}
             alt={plugin.name}
-            onError={(e) => {
+            onError={e => {
               // 如果图片加载失败，显示默认图标
               const target = e.target as HTMLImageElement;
               target.style.display = 'none';
               const parent = target.parentElement;
               if (parent && !parent.querySelector('.fallback-icon')) {
                 const fallbackIcon = document.createElement('div');
-                fallbackIcon.className = 'fallback-icon w-8 h-8 mb-2 bg-blue-500 rounded flex items-center justify-center text-white text-sm font-bold';
+                fallbackIcon.className =
+                  'fallback-icon w-8 h-8 mb-2 bg-blue-500 rounded flex items-center justify-center text-white text-sm font-bold';
                 fallbackIcon.textContent = plugin.name.charAt(0).toUpperCase();
                 parent.insertBefore(fallbackIcon, target);
               }
@@ -43,4 +43,4 @@ export default function PluginGrid({ plugins, onPluginSelect, searchQuery }: Plu
       ))}
     </div>
   );
-} 
+}

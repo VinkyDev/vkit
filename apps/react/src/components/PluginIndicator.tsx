@@ -9,10 +9,10 @@ interface PluginIndicatorProps {
 export default function PluginIndicator({ plugin, onClose }: PluginIndicatorProps) {
   return (
     <div className='flex items-center space-x-2 px-2 py-1 bg-blue-50 border border-blue-200 rounded-md'>
-      {plugin.iconUrl ? (
+      {plugin.icon ? (
         <img 
           className='w-5 h-5' 
-          src={plugin.iconUrl} 
+          src={plugin.icon} 
           alt={plugin.name}
           onError={(e) => {
             (e.target as HTMLImageElement).style.display = 'none';

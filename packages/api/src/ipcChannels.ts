@@ -1,8 +1,10 @@
 export const IpcChannels = {
+  // 窗口管理相关事件
   SET_WINDOW_SIZE: 'set-window-size',
   SHOW_WINDOW: 'show-window',
   HIDE_WINDOW: 'hide-window',
 
+  // 插件管理相关事件
   CREATE_PLUGIN_VIEW: 'create-plugin-view',
   CLOSE_PLUGIN_VIEW: 'close-plugin-view',
 
@@ -12,4 +14,14 @@ export const IpcChannels = {
   
   // 插件初始化数据
   PLUGIN_INIT_DATA: 'plugin-init-data',
+
+  // Webview 管理相关事件
+  WEBVIEW_CREATE: 'webview-create',
+  WEBVIEW_DESTROY: 'webview-destroy',
+  WEBVIEW_UPDATE_URL: 'webview-update-url',
+  WEBVIEW_RELOAD: 'webview-reload',
+  WEBVIEW_TOGGLE_DEV_TOOLS: 'webview-toggle-dev-tools',
+  WEBVIEW_SET_BOUNDS: 'webview-set-bounds',
+  WEBVIEW_SET_VISIBLE: 'webview-set-visible',
+  WEBVIEW_EXECUTE_JAVASCRIPT: 'webview-execute-javascript',
 } as const;

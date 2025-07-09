@@ -1,7 +1,9 @@
-import { setupWindow } from "./window";
-import { setupView } from './view';
+import { setupWindow } from './window';
+import { setupWebviewManager } from './webviewManager';
+import { setupPluginView } from './pluginView';
 
 export const setupIpc = () => {
   setupWindow();
-  setupView();
-}
+  setupWebviewManager();
+  setupPluginView();
+};
