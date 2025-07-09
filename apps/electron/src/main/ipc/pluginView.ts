@@ -6,7 +6,7 @@ import {
   ISearchInputEnterEvent,
   IPluginInitData,
 } from '@vkit/api';
-import { ipcMain, IpcMainInvokeEvent, WebContentsView } from 'electron';
+import { ipcMain, IpcMainInvokeEvent, LoadFileOptions, WebContentsView } from 'electron';
 import path from 'path';
 import { getMainWindow } from '../mainWindow';
 import { PLUGIN_VIEW_HEIGHT, SEARCH_HEIGHT, WINDOW_WIDTH } from '@vkit/constants';
@@ -48,7 +48,14 @@ const createPluginView = (
     entryPath = path.resolve(__dirname, `../features/${id}`, entry);
   }
 
-  pluginView.webContents.loadFile(entryPath);
+  const loadOptions: LoadFileOptions = {};
+  if (initData) {
+    loadOptions.query = {
+      initData: encodeURIComponent(JSON.stringify(initData)),
+    };
+  }
+
+  pluginView.webContents.loadFile(entryPath, loadOptions);
   win?.contentView.addChildView(pluginView);
 
   pluginView.webContents.on('did-finish-load', () => {
@@ -59,10 +66,6 @@ const createPluginView = (
       width: WINDOW_WIDTH,
       height: PLUGIN_VIEW_HEIGHT,
     });
-
-    if (initData && pluginView && !pluginView.webContents.isDestroyed()) {
-      pluginView.webContents.send(IpcChannels.PLUGIN_INIT_DATA, initData);
-    }
   });
 };
 

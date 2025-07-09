@@ -15,7 +15,7 @@
     "build:linux": "pnpm run build && pnpm run --filter electron build:linux",
     "build:react": "pnpm --filter react build",
     "build:electron": "pnpm --filter electron build",
-    "build:features": "pnpm --filter './features/*' build",
+    "build:features": "pnpm --filter \"./features/*\" build",
     "clean": "pnpm run clean:dist && pnpm run clean:modules",
     "clean:dist": "pnpm -rc exec rm -rf *.tsbuildinfo .cache build dist dist-electron",
     "clean:modules": "pnpm -rc exec rm -rf node_modules && pnpm -c exec rm -rf ./node_modules",

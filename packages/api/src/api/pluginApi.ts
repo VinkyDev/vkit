@@ -14,7 +14,7 @@ import type {
  * 创建插件视图
  * @param plugin 插件清单信息
  * @param initData 初始化数据（可选）
- * 
+ *
  * @example
  * ```typescript
  * // 创建一个简单的插件视图
@@ -25,7 +25,7 @@ import type {
  *   type: PluginType.BUILTIN,
  *   allowSearch: true
  * });
- * 
+ *
  * // 创建带初始化数据的插件视图
  * createPluginView(pluginManifest, {
  *   initialValue: '{"name": "test"}',
@@ -33,18 +33,15 @@ import type {
  * });
  * ```
  */
-export const createPluginView = (
-  plugin: IPluginManifest,
-  initData?: IPluginInitData
-): void => {
+export const createPluginView = (plugin: IPluginManifest, initData?: IPluginInitData): void => {
   window.electron.ipcRenderer.invoke(IpcChannels.CREATE_PLUGIN_VIEW, plugin, initData);
 };
 
 /**
  * 关闭当前插件视图
- * 
+ *
  * 注意：这将关闭当前活跃的插件视图以及所有相关的webview
- * 
+ *
  * @example
  * ```typescript
  * // 关闭当前插件
@@ -58,7 +55,7 @@ export const closePluginView = (): void => {
 /**
  * 发送搜索输入变化事件到插件
  * @param event 搜索输入变化事件数据
- * 
+ *
  * @example
  * ```typescript
  * // 当搜索框内容改变时发送事件
@@ -72,7 +69,7 @@ export const sendSearchInputChange = (event: ISearchInputChangeEvent): void => {
 /**
  * 发送搜索输入回车事件到插件
  * @param event 搜索输入回车事件数据
- * 
+ *
  * @example
  * ```typescript
  * // 当用户在搜索框按回车时发送事件
@@ -90,7 +87,7 @@ export const sendSearchInputEnter = (event: ISearchInputEnterEvent): void => {
 /**
  * 在插件中监听搜索输入变化事件
  * @param callback 事件回调函数
- * 
+ *
  * @example
  * ```typescript
  * // 在插件中监听搜索输入变化
@@ -100,9 +97,7 @@ export const sendSearchInputEnter = (event: ISearchInputEnterEvent): void => {
  * });
  * ```
  */
-export const onSearchInputChange = (
-  callback: (event: ISearchInputChangeEvent) => void
-): void => {
+export const onSearchInputChange = (callback: (event: ISearchInputChangeEvent) => void): void => {
   window.electron.ipcRenderer.on(
     IpcChannels.SEARCH_INPUT_CHANGE,
     (_event, data: ISearchInputChangeEvent) => {
@@ -114,7 +109,7 @@ export const onSearchInputChange = (
 /**
  * 在插件中监听搜索输入回车事件
  * @param callback 事件回调函数
- * 
+ *
  * @example
  * ```typescript
  * // 在插件中监听回车事件
@@ -124,9 +119,7 @@ export const onSearchInputChange = (
  * });
  * ```
  */
-export const onSearchInputEnter = (
-  callback: (event: ISearchInputEnterEvent) => void
-): void => {
+export const onSearchInputEnter = (callback: (event: ISearchInputEnterEvent) => void): void => {
   window.electron.ipcRenderer.on(
     IpcChannels.SEARCH_INPUT_ENTER,
     (_event, data: ISearchInputEnterEvent) => {
@@ -135,32 +128,42 @@ export const onSearchInputEnter = (
   );
 };
 
+// ============================================================================
+// 插件初始化数据 API
+// ============================================================================
+
 /**
- * 在插件中监听初始化数据
- * @param callback 数据回调函数
- * 
+ * 从URL参数中获取插件初始化数据
+ * @returns 初始化数据对象，如果没有则返回null
+ *
  * @example
  * ```typescript
- * // 在插件中监听初始化数据
- * onPluginInitData((data) => {
- *   if (data.initialValue) {
- *     // 设置初始值
- *     setJsonValue(data.initialValue);
- *   }
- *   if (data.context) {
- *     // 应用上下文配置
- *     applyContext(data.context);
- *   }
- * });
+ * // 在插件中获取初始化数据
+ * const initData = getPluginInitData();
+ * if (initData?.initialValue) {
+ *   // 设置初始值
+ *   setJsonValue(initData.initialValue);
+ * }
+ * if (initData?.context) {
+ *   // 应用上下文配置
+ *   applyContext(initData.context);
+ * }
  * ```
  */
-export const onPluginInitData = (callback: (data: IPluginInitData) => void): void => {
-  window.electron.ipcRenderer.on(
-    IpcChannels.PLUGIN_INIT_DATA,
-    (_event, data: IPluginInitData) => {
-      callback(data);
+export const getPluginInitData = (): IPluginInitData | null => {
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const initDataParam = urlParams.get('initData');
+
+    if (initDataParam) {
+      const decodedData = decodeURIComponent(initDataParam);
+      return JSON.parse(decodedData) as IPluginInitData;
     }
-  );
+
+    return null;
+  } catch {
+    return null;
+  }
 };
 
 // ============================================================================
@@ -169,9 +172,9 @@ export const onPluginInitData = (callback: (data: IPluginInitData) => void): voi
 
 /**
  * 移除所有搜索输入相关的监听器
- * 
+ *
  * 通常在插件卸载时调用以避免内存泄漏
- * 
+ *
  * @example
  * ```typescript
  * // 插件卸载时清理监听器
@@ -186,16 +189,3 @@ export const removeSearchInputListeners = (): void => {
   window.electron.ipcRenderer.removeAllListeners(IpcChannels.SEARCH_INPUT_CHANGE);
   window.electron.ipcRenderer.removeAllListeners(IpcChannels.SEARCH_INPUT_ENTER);
 };
-
-/**
- * 移除插件初始化数据监听器
- * 
- * @example
- * ```typescript
- * // 清理初始化数据监听器
- * removePluginInitDataListener();
- * ```
- */
-export const removePluginInitDataListener = (): void => {
-  window.electron.ipcRenderer.removeAllListeners(IpcChannels.PLUGIN_INIT_DATA);
-}; 

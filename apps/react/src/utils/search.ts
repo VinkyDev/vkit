@@ -70,17 +70,13 @@ function specialRuleMatch(
   let matchedRule = '';
 
   for (const rule of plugin.matchRules) {
-    try {
-      const regex = new RegExp(rule.pattern, 'i');
-      if (regex.test(query)) {
-        const score = rule.weight;
-        if (score > maxScore) {
-          maxScore = score;
-          matchedRule = rule.description ?? rule.pattern;
-        }
+    const regex = new RegExp(rule.pattern, 'i');
+    if (regex.test(query)) {
+      const score = rule.weight;
+      if (score > maxScore) {
+        maxScore = score;
+        matchedRule = rule.description ?? rule.pattern;
       }
-    } catch (error) {
-      console.warn(`Invalid regex pattern: ${rule.pattern}`, error);
     }
   }
 
