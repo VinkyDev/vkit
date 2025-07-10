@@ -14,6 +14,42 @@ export function getMainWindow() {
   return null;
 }
 
+/**
+ * 显示主窗口
+ */
+export function showMainWindow() {
+  const win = getMainWindow();
+  if (win) {
+    win.show();
+    win.focus();
+  }
+}
+
+/**
+ * 隐藏主窗口
+ */
+export function hideMainWindow() {
+  const win = getMainWindow();
+  if (win) {
+    win.hide();
+  }
+}
+
+/**
+ * 切换主窗口显示状态
+ */
+export function toggleMainWindow() {
+  const win = getMainWindow();
+  if (win) {
+    if (win.isVisible()) {
+      win.hide();
+    } else {
+      win.show();
+      win.focus();
+    }
+  }
+}
+
 export function createMainWindow(): void {
   const win = (mainWindow = new BrowserWindow({
     width: WINDOW_WIDTH,
@@ -35,6 +71,13 @@ export function createMainWindow(): void {
 
   win.on('ready-to-show', () => {
     win.show();
+  });
+
+  // 窗口失焦自动隐藏
+  win.on('blur', () => {
+    if (!is.dev) {
+      win.hide();
+    }
   });
 
   win.webContents.setWindowOpenHandler(details => {

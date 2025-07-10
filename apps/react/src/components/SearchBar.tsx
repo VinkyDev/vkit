@@ -19,42 +19,13 @@ export default function SearchBar({
 }: SearchBarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // 组件加载完成后自动聚焦到输入框
+  // 自动聚焦
   useEffect(() => {
-    if (inputRef.current && !selectedPlugin) {
-      inputRef.current.focus();
+    if (!selectedPlugin && inputRef.current) {
+      requestIdleCallback(() => {
+        inputRef.current?.focus();
+      });
     }
-  }, [selectedPlugin]);
-
-  // 自动聚焦机制 - 确保input始终保持焦点
-  useEffect(() => {
-    const handleWindowFocus = () => {
-      if (inputRef.current && !selectedPlugin) {
-        inputRef.current.focus();
-      }
-    };
-
-    const handleDocumentClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const isButton = target.tagName === 'BUTTON' || target.closest('button');
-      const isPluginItem = target.closest('[data-plugin-item]');
-
-      if (!isButton && !isPluginItem && inputRef.current && !selectedPlugin) {
-        requestIdleCallback(() => {
-          if (inputRef.current) {
-            inputRef.current.focus();
-          }
-        });
-      }
-    };
-
-    window.addEventListener('focus', handleWindowFocus);
-    document.addEventListener('click', handleDocumentClick);
-
-    return () => {
-      window.removeEventListener('focus', handleWindowFocus);
-      document.removeEventListener('click', handleDocumentClick);
-    };
   }, [selectedPlugin]);
 
   const handleInputBlur = () => {

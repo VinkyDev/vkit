@@ -1,8 +1,8 @@
-import { app, BrowserWindow, globalShortcut } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import { electronApp, optimizer } from '@electron-toolkit/utils';
 import { createMainWindow } from './mainWindow';
 import { setupIpc } from './ipc';
-import { closePluginView, hasActivePluginView } from './ipc/pluginView';
+import { initGlobalShortcut, cleanupGlobalShortcut } from './ipc/globalShortcut';
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.vinky.vkit');
@@ -15,15 +15,8 @@ app.whenReady().then(() => {
   });
 
   setupIpc();
-
   createMainWindow();
-
-  // 注册ESC快捷键关闭插件视图
-  globalShortcut.register('Escape', () => {
-    if (hasActivePluginView()) {
-      closePluginView();
-    }
-  });
+  initGlobalShortcut();
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
@@ -33,8 +26,8 @@ app.whenReady().then(() => {
 });
 
 app.on('will-quit', () => {
-  // 取消注册所有快捷键
-  globalShortcut.unregisterAll();
+  // 清理全局快捷键
+  cleanupGlobalShortcut();
 });
 
 app.on('window-all-closed', () => {

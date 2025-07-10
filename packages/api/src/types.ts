@@ -28,6 +28,16 @@ export interface IWindowSetSizeParams {
   height: number;
 }
 
+export interface IGlobalShortcutParams {
+  shortcut: string;
+}
+
+export interface IGlobalShortcutResponse {
+  shortcut: string;
+  success: boolean;
+  error?: string;
+}
+
 export interface ISearchInputChangeEvent {
   value: string;
 }

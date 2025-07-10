@@ -11,6 +11,9 @@ node_modules/
 # Build outputs
 dist/
 release/
+**/build/
+!electron/build/
+!electron/build/**
 dist-electron/
 coverage/
 *.tsbuildinfo

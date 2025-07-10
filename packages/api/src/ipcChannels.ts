@@ -6,6 +6,9 @@ export const IpcChannels = {
   SET_WINDOW_SIZE: 'set-window-size',
   SHOW_WINDOW: 'show-window',
   HIDE_WINDOW: 'hide-window',
+  TOGGLE_WINDOW: 'toggle-window',
+  SET_GLOBAL_SHORTCUT: 'set-global-shortcut',
+  GET_GLOBAL_SHORTCUT: 'get-global-shortcut',
 
   // 插件管理相关事件
   CREATE_PLUGIN_VIEW: 'create-plugin-view',
