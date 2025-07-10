@@ -3,7 +3,9 @@ import type { OnMount } from '@monaco-editor/react';
 import type * as monaco from 'monaco-editor';
 import { 
   DEFAULT_EDITOR_OPTIONS, 
-  JSON_LANGUAGE_CONFIG
+  JSON_LANGUAGE_CONFIG,
+  FROSTED_GLASS_THEME,
+  FROSTED_GLASS_THEME_DATA
 } from '../utils/constants';
 import { formatJSON, minifyJSON } from '@vkit/utils';
 
@@ -64,6 +66,10 @@ export function useMonacoEditor(props: UseMonacoEditorProps = {}): UseMonacoEdit
   const handleEditorDidMount: OnMount = useCallback(
     (editor, monacoInstance) => {
       editorRef.current = editor;
+
+      // 注册毛玻璃主题
+      monacoInstance.editor.defineTheme(FROSTED_GLASS_THEME, FROSTED_GLASS_THEME_DATA);
+      monacoInstance.editor.setTheme(FROSTED_GLASS_THEME);
 
       // 配置JSON语言设置
       monacoInstance.languages.json.jsonDefaults.setDiagnosticsOptions({

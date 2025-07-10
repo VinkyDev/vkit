@@ -35,6 +35,8 @@ const createPluginView = (
       nodeIntegration: false,
     },
   });
+
+  pluginView.setBackgroundColor('#00000000');
   pluginView.setBorderRadius(0);
 
   const win = getMainWindow();
@@ -72,13 +74,19 @@ const createPluginView = (
 /**
  * 关闭插件视图
  */
-const closePluginView = () => {
+export const closePluginView = () => {
   // 先清理所有webview
   cleanupAllWebviews();
 
   if (pluginView) {
     pluginView.webContents.close();
     pluginView = null;
+    
+    // 通知主窗口插件视图已关闭
+    const mainWindow = getMainWindow();
+    if (mainWindow && !mainWindow.webContents.isDestroyed()) {
+      mainWindow.webContents.send(IpcChannels.PLUGIN_VIEW_CLOSED);
+    }
   }
 };
 
@@ -98,6 +106,13 @@ const handleSearchInputEnter = (_event: IpcMainInvokeEvent, data: ISearchInputEn
   if (pluginView && !pluginView.webContents.isDestroyed()) {
     pluginView.webContents.send(IpcChannels.SEARCH_INPUT_ENTER, data);
   }
+};
+
+/**
+ * 获取当前是否有活跃的插件视图
+ */
+export const hasActivePluginView = (): boolean => {
+  return pluginView !== null && !pluginView.webContents.isDestroyed();
 };
 
 /**

@@ -18,50 +18,41 @@ const Toolbar = ({
 }: ToolbarProps) => {
   return (
     <div
-      className='absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex items-center justify-between px-4 shadow-lg'
+      className='absolute bottom-0 left-0 right-0 border-t border-black/10 flex items-center px-3'
       style={{ height: TOOLBAR_HEIGHT }}
     >
-      {/* 左侧：开发者工具控制 */}
-      <div className='flex items-center space-x-3'>
+      <div className='flex-1 flex items-center bg-black/5 rounded-full px-4 py-1 mx-2'>
+        <Globe className='w-4 h-4 text-gray-500 mr-3 flex-shrink-0' />
+        <span className='flex-1 text-sm text-gray-700 truncate font-mono'>{currentUrl}</span>
+      </div>
+
+      <div className='flex items-center space-x-2'>
         <button
           onClick={onDevToolsToggle}
-          className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+          className={`p-2 rounded-full transition-all duration-200 ${
             devToolsEnabled
-              ? 'bg-green-100 text-green-700 hover:bg-green-200 shadow-sm'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              ? 'bg-green-500/20 text-green-600 hover:bg-green-500/30'
+              : 'bg-gray-500/10 text-gray-500 hover:bg-gray-500/20'
           }`}
+          title={devToolsEnabled ? 'DevTools: 开启' : 'DevTools: 关闭'}
         >
           <Code2 className='w-4 h-4' />
-          <span>{devToolsEnabled ? 'DevTools ON' : 'DevTools OFF'}</span>
         </button>
 
         <button
           onClick={onRefresh}
-          className='flex items-center space-x-2 px-3 py-1.5 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm'
+          className='p-2 rounded-full bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 transition-all duration-200'
+          title='刷新页面'
         >
           <RefreshCw className='w-4 h-4' />
-          <span>刷新</span>
         </button>
-      </div>
 
-      {/* 中间：当前URL显示 */}
-      <div className='flex-1 mx-4 flex items-center justify-center'>
-        <div className='bg-gray-50 px-4 py-2 rounded-lg max-w-md truncate'>
-          <div className='flex items-center space-x-2 text-sm'>
-            <Globe className='w-4 h-4 text-gray-400 flex-shrink-0' />
-            <span className='text-gray-600 truncate font-mono text-xs'>{currentUrl}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* 右侧：关闭按钮 */}
-      <div className='flex items-center'>
         <button
           onClick={onClose}
-          className='flex items-center space-x-2 px-4 py-1.5 bg-red-100 text-red-700 hover:bg-red-200 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm'
+          className='p-2 rounded-full bg-red-500/10 text-red-600 hover:bg-red-500/20 transition-all duration-200'
+          title='关闭工具'
         >
           <X className='w-4 h-4' />
-          <span>关闭</span>
         </button>
       </div>
     </div>

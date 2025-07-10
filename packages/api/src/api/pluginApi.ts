@@ -34,7 +34,7 @@ import type {
  * ```
  */
 export const createPluginView = (plugin: IPluginManifest, initData?: IPluginInitData): void => {
-  window.electron.ipcRenderer.invoke(IpcChannels.CREATE_PLUGIN_VIEW, plugin, initData);
+  window?.electron?.ipcRenderer?.invoke(IpcChannels.CREATE_PLUGIN_VIEW, plugin, initData);
 };
 
 /**
@@ -49,7 +49,7 @@ export const createPluginView = (plugin: IPluginManifest, initData?: IPluginInit
  * ```
  */
 export const closePluginView = (): void => {
-  window.electron.ipcRenderer.invoke(IpcChannels.CLOSE_PLUGIN_VIEW);
+  window?.electron?.ipcRenderer?.invoke(IpcChannels.CLOSE_PLUGIN_VIEW);
 };
 
 /**
@@ -63,7 +63,7 @@ export const closePluginView = (): void => {
  * ```
  */
 export const sendSearchInputChange = (event: ISearchInputChangeEvent): void => {
-  window.electron.ipcRenderer.invoke(IpcChannels.SEARCH_INPUT_CHANGE, event);
+  window?.electron?.ipcRenderer?.invoke(IpcChannels.SEARCH_INPUT_CHANGE, event);
 };
 
 /**
@@ -77,7 +77,7 @@ export const sendSearchInputChange = (event: ISearchInputChangeEvent): void => {
  * ```
  */
 export const sendSearchInputEnter = (event: ISearchInputEnterEvent): void => {
-  window.electron.ipcRenderer.invoke(IpcChannels.SEARCH_INPUT_ENTER, event);
+  window?.electron?.ipcRenderer?.invoke(IpcChannels.SEARCH_INPUT_ENTER, event);
 };
 
 // ============================================================================
@@ -98,7 +98,7 @@ export const sendSearchInputEnter = (event: ISearchInputEnterEvent): void => {
  * ```
  */
 export const onSearchInputChange = (callback: (event: ISearchInputChangeEvent) => void): void => {
-  window.electron.ipcRenderer.on(
+  window?.electron?.ipcRenderer?.on(
     IpcChannels.SEARCH_INPUT_CHANGE,
     (_event, data: ISearchInputChangeEvent) => {
       callback(data);
@@ -120,12 +120,48 @@ export const onSearchInputChange = (callback: (event: ISearchInputChangeEvent) =
  * ```
  */
 export const onSearchInputEnter = (callback: (event: ISearchInputEnterEvent) => void): void => {
-  window.electron.ipcRenderer.on(
+  window?.electron?.ipcRenderer?.on(
     IpcChannels.SEARCH_INPUT_ENTER,
     (_event, data: ISearchInputEnterEvent) => {
       callback(data);
     }
   );
+};
+
+/**
+ * 监听插件视图关闭事件
+ * @param callback 插件视图关闭时的回调函数
+ *
+ * @example
+ * ```typescript
+ * // 在主应用中监听插件视图关闭
+ * onPluginViewClosed(() => {
+ *   console.log('插件视图已关闭');
+ *   // 重置应用状态...
+ * });
+ * ```
+ */
+export const onPluginViewClosed = (callback: () => void): void => {
+  window?.electron?.ipcRenderer?.on(IpcChannels.PLUGIN_VIEW_CLOSED, () => {
+    callback();
+  });
+};
+
+/**
+ * 移除插件视图关闭事件监听器
+ * @param callback 要移除的回调函数
+ *
+ * @example
+ * ```typescript
+ * const handleClose = () => console.log('closed');
+ * onPluginViewClosed(handleClose);
+ *
+ * // 稍后移除监听器
+ * removePluginViewClosedListener(handleClose);
+ * ```
+ */
+export const removePluginViewClosedListener = (): void => {
+  window?.electron?.ipcRenderer?.removeAllListeners(IpcChannels.PLUGIN_VIEW_CLOSED);
 };
 
 // ============================================================================
@@ -186,6 +222,26 @@ export const getPluginInitData = (): IPluginInitData | null => {
  * ```
  */
 export const removeSearchInputListeners = (): void => {
-  window.electron.ipcRenderer.removeAllListeners(IpcChannels.SEARCH_INPUT_CHANGE);
-  window.electron.ipcRenderer.removeAllListeners(IpcChannels.SEARCH_INPUT_ENTER);
+  window?.electron?.ipcRenderer?.removeAllListeners(IpcChannels.SEARCH_INPUT_CHANGE);
+  window?.electron?.ipcRenderer?.removeAllListeners(IpcChannels.SEARCH_INPUT_ENTER);
+};
+
+/**
+ * 移除所有插件相关的监听器
+ *
+ * 通常在应用卸载时调用以避免内存泄漏
+ *
+ * @example
+ * ```typescript
+ * // 应用卸载时清理所有监听器
+ * useEffect(() => {
+ *   return () => {
+ *     removeAllPluginListeners();
+ *   };
+ * }, []);
+ * ```
+ */
+export const removeAllPluginListeners = (): void => {
+  removeSearchInputListeners();
+  removePluginViewClosedListener();
 };

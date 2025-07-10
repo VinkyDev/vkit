@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
-import Editor, { type OnChange } from '@monaco-editor/react';
+import { useCallback, useEffect } from 'react';
+import Editor, { type OnChange, type OnMount } from '@monaco-editor/react';
 import { useMonacoEditor, type UseMonacoEditorProps } from '../hooks';
 import { valueToJSONString, safeParseJSON } from '@vkit/utils';
 import { EDITOR_THEME, EDITOR_LANGUAGE } from '../utils';
@@ -19,6 +19,8 @@ interface JSONEditorProps {
   lineNumbers?: boolean;
   /** 是否开启语法验证 */
   validation?: boolean;
+  /** 是否自动聚焦 */
+  autoFocus?: boolean;
 }
 
 const JSONEditor = ({
@@ -29,25 +31,41 @@ const JSONEditor = ({
   readOnly = false,
   lineNumbers = true,
   validation = true,
+  autoFocus = true,
 }: JSONEditorProps) => {
-
   const editorProps: UseMonacoEditorProps = {
     readOnly,
     lineNumbers,
     validation,
-    onFormat: onChange ? (formatted) => {
-      const parseResult = safeParseJSON(formatted);
-      onChange(formatted, parseResult.success ? parseResult.data : undefined);
-    } : undefined,
-    onMinify: onChange ? (minified) => {
-      const parseResult = safeParseJSON(minified);
-      onChange(minified, parseResult.success ? parseResult.data : undefined);
-    } : undefined,
+    onFormat: onChange
+      ? formatted => {
+          const parseResult = safeParseJSON(formatted);
+          onChange(formatted, parseResult.success ? parseResult.data : undefined);
+        }
+      : undefined,
+    onMinify: onChange
+      ? minified => {
+          const parseResult = safeParseJSON(minified);
+          onChange(minified, parseResult.success ? parseResult.data : undefined);
+        }
+      : undefined,
   };
 
-  const { handleEditorDidMount } = useMonacoEditor(editorProps);
+  const { handleEditorDidMount, focus } = useMonacoEditor(editorProps);
 
   const editorValue = valueToJSONString(value, 2);
+
+  // 自动聚焦功能
+  useEffect(() => {
+    if (autoFocus) {
+      // 延迟一下确保编辑器完全挂载
+      const timer = setTimeout(() => {
+        focus();
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [autoFocus, focus]);
 
   const handleEditorChange: OnChange = useCallback(
     newValue => {
@@ -59,8 +77,23 @@ const JSONEditor = ({
     [onChange]
   );
 
+  const handleEditorDidMountWithFocus = useCallback(
+    (editor: Parameters<OnMount>[0], monaco: Parameters<OnMount>[1]) => {
+      // 调用原始的挂载处理
+      handleEditorDidMount(editor, monaco);
+
+      // 如果开启自动聚焦，立即聚焦编辑器
+      if (autoFocus) {
+        requestIdleCallback(() => {
+          editor.focus();
+        });
+      }
+    },
+    [handleEditorDidMount, autoFocus]
+  );
+
   return (
-    <div className='w-full h-full relative overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm'>
+    <div className='w-full h-full relative overflow-hidden rounded-lg'>
       <Editor
         height={height}
         width={width}
@@ -68,7 +101,7 @@ const JSONEditor = ({
         theme={EDITOR_THEME}
         value={editorValue}
         onChange={handleEditorChange}
-        onMount={handleEditorDidMount}
+        onMount={handleEditorDidMountWithFocus}
         options={{
           automaticLayout: true,
         }}

@@ -1,5 +1,5 @@
 import { is } from '@electron-toolkit/utils';
-import { WINDOW_WIDTH } from '@vkit/constants';
+import { WINDOW_HEIGHT, WINDOW_WIDTH } from '@vkit/constants';
 import { BrowserWindow, shell } from 'electron';
 import { join } from 'path';
 let mainWindow: BrowserWindow | null = null;
@@ -17,10 +17,14 @@ export function getMainWindow() {
 export function createMainWindow(): void {
   const win = (mainWindow = new BrowserWindow({
     width: WINDOW_WIDTH,
-    height: 600,
+    height: WINDOW_HEIGHT,
     autoHideMenuBar: true,
     frame: false,
     skipTaskbar: true,
+    vibrancy: 'fullscreen-ui',
+    backgroundMaterial: 'acrylic',
+    transparent: true,
+    visualEffectState: 'active',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,

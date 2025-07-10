@@ -10,6 +10,7 @@ export const IpcChannels = {
   // 插件管理相关事件
   CREATE_PLUGIN_VIEW: 'create-plugin-view',
   CLOSE_PLUGIN_VIEW: 'close-plugin-view',
+  PLUGIN_VIEW_CLOSED: 'plugin-view-closed',
 
   // 输入框相关事件
   SEARCH_INPUT_CHANGE: 'search-input-change',

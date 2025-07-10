@@ -100,6 +100,8 @@ export interface IWebviewCreateParams {
   openDevTools?: boolean;
   /** 开发者工具模式 */
   devToolsMode?: DevToolsMode;
+  /** 背景颜色 */
+  backgroundColor?: string;
 }
 
 /**

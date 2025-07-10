@@ -29,7 +29,7 @@ export const setWindowSize = async (params: IWindowSetSizeParams): Promise<void>
  * ```
  */
 export const showWindow = async (): Promise<void> => {
-  await window.electron.ipcRenderer.invoke(IpcChannels.SHOW_WINDOW);
+  await window?.electron?.ipcRenderer?.invoke(IpcChannels.SHOW_WINDOW);
 };
 
 /**
@@ -42,5 +42,5 @@ export const showWindow = async (): Promise<void> => {
  * ```
  */
 export const hideWindow = async (): Promise<void> => {
-  await window.electron.ipcRenderer.invoke(IpcChannels.HIDE_WINDOW);
+  await window?.electron?.ipcRenderer?.invoke(IpcChannels.HIDE_WINDOW);
 }; 

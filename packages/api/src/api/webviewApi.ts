@@ -53,7 +53,7 @@ import type {
 export const createWebview = async (
   params: IWebviewCreateParams
 ): Promise<IWebviewOperationResult> => {
-  return (await window.electron.ipcRenderer.invoke(
+  return (await window?.electron?.ipcRenderer?.invoke(
     IpcChannels.WEBVIEW_CREATE,
     params
   )) as IWebviewOperationResult;
@@ -82,7 +82,7 @@ export const createWebview = async (
 export const destroyWebview = async (
   params?: IWebviewDestroyParams
 ): Promise<IWebviewOperationResult> => {
-  return (await window.electron.ipcRenderer.invoke(
+  return (await window?.electron?.ipcRenderer?.invoke(
     IpcChannels.WEBVIEW_DESTROY,
     params
   )) as IWebviewOperationResult;
@@ -97,7 +97,7 @@ export const destroyWebview = async (
  * ```typescript
  * // 更新默认webview的URL
  * const result = await updateWebviewUrl({ 
- *   url: 'http://localhost:9001' 
+ *   url: 'http://localhost:3000' 
  * });
  *
  * // 更新指定webview的URL
@@ -117,7 +117,7 @@ export const destroyWebview = async (
 export const updateWebviewUrl = async (
   params: IWebviewUpdateUrlParams
 ): Promise<IWebviewOperationResult> => {
-  return (await window.electron.ipcRenderer.invoke(
+  return (await window?.electron?.ipcRenderer?.invoke(
     IpcChannels.WEBVIEW_UPDATE_URL,
     params
   )) as IWebviewOperationResult;
@@ -150,7 +150,7 @@ export const updateWebviewUrl = async (
 export const reloadWebview = async (
   params?: IWebviewReloadParams
 ): Promise<IWebviewOperationResult> => {
-  return (await window.electron.ipcRenderer.invoke(
+  return (await window?.electron?.ipcRenderer?.invoke(
     IpcChannels.WEBVIEW_RELOAD,
     params
   )) as IWebviewOperationResult;
@@ -188,7 +188,7 @@ export const reloadWebview = async (
 export const toggleWebviewDevTools = async (
   params: IWebviewToggleDevToolsParams
 ): Promise<IWebviewOperationResult> => {
-  return (await window.electron.ipcRenderer.invoke(
+  return (await window?.electron?.ipcRenderer?.invoke(
     IpcChannels.WEBVIEW_TOGGLE_DEV_TOOLS,
     params
   )) as IWebviewOperationResult;
@@ -221,7 +221,7 @@ export const toggleWebviewDevTools = async (
 export const setWebviewBounds = async (
   params: IWebviewSetBoundsParams
 ): Promise<IWebviewOperationResult> => {
-  return (await window.electron.ipcRenderer.invoke(
+  return (await window?.electron?.ipcRenderer?.invoke(
     IpcChannels.WEBVIEW_SET_BOUNDS,
     params
   )) as IWebviewOperationResult;
@@ -254,7 +254,7 @@ export const setWebviewBounds = async (
 export const setWebviewVisible = async (
   params: IWebviewSetVisibleParams
 ): Promise<IWebviewOperationResult> => {
-  return (await window.electron.ipcRenderer.invoke(
+  return (await window?.electron?.ipcRenderer?.invoke(
     IpcChannels.WEBVIEW_SET_VISIBLE,
     params
   )) as IWebviewOperationResult;

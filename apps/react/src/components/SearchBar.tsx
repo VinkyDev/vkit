@@ -1,5 +1,7 @@
 import { sendSearchInputChange, sendSearchInputEnter, type IPluginManifest } from '@vkit/api';
 import { SEARCH_HEIGHT } from '@vkit/constants';
+import { useEffect, useRef } from 'react';
+import { Search, ArrowLeft } from 'lucide-react';
 import PluginIndicator from './PluginIndicator';
 
 interface SearchBarProps {
@@ -9,46 +11,107 @@ interface SearchBarProps {
   onPluginClose: () => void;
 }
 
-export default function SearchBar({ 
-  inputValue, 
-  onInputChange, 
-  selectedPlugin, 
-  onPluginClose
+export default function SearchBar({
+  inputValue,
+  onInputChange,
+  selectedPlugin,
+  onPluginClose,
 }: SearchBarProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // 组件加载完成后自动聚焦到输入框
+  useEffect(() => {
+    if (inputRef.current && !selectedPlugin) {
+      inputRef.current.focus();
+    }
+  }, [selectedPlugin]);
+
+  // 自动聚焦机制 - 确保input始终保持焦点
+  useEffect(() => {
+    const handleWindowFocus = () => {
+      if (inputRef.current && !selectedPlugin) {
+        inputRef.current.focus();
+      }
+    };
+
+    const handleDocumentClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const isButton = target.tagName === 'BUTTON' || target.closest('button');
+      const isPluginItem = target.closest('[data-plugin-item]');
+
+      if (!isButton && !isPluginItem && inputRef.current && !selectedPlugin) {
+        requestIdleCallback(() => {
+          if (inputRef.current) {
+            inputRef.current.focus();
+          }
+        });
+      }
+    };
+
+    window.addEventListener('focus', handleWindowFocus);
+    document.addEventListener('click', handleDocumentClick);
+
+    return () => {
+      window.removeEventListener('focus', handleWindowFocus);
+      document.removeEventListener('click', handleDocumentClick);
+    };
+  }, [selectedPlugin]);
+
+  const handleInputBlur = () => {
+    if (!selectedPlugin) {
+      requestIdleCallback(() => {
+        const activeElement = document.activeElement;
+        if (!activeElement || activeElement === document.body) {
+          if (inputRef.current) {
+            inputRef.current.focus();
+          }
+        }
+      });
+    }
+  };
+
   const handleInputChange = (value: string) => {
     onInputChange(value);
-    // 发送输入框内容变化事件到插件
     sendSearchInputChange({ value });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      // 发送回车事件到插件
+    if (e.key === 'Enter' && selectedPlugin) {
       sendSearchInputEnter({ value: inputValue });
+    }
+    if (e.key === 'Backspace' && selectedPlugin && inputValue.length === 0) {
+      onPluginClose();
     }
   };
 
   return (
-    <div
-      className='bg-gray-100 px-4 py-3 flex items-center space-x-3 border border-gray-200/80'
-      style={{ height: SEARCH_HEIGHT }}
-    >
-      {!selectedPlugin ? (
-        <div className='w-7 h-7 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-sm font-bold text-white shadow-md'>
-          V
-        </div>
-      ) : (
-        <PluginIndicator plugin={selectedPlugin} onClose={onPluginClose} />
-      )}
-      
-      <input
-        type='text'
-        placeholder='Hello, vkit! Please enter a keyword'
-        className='bg-transparent text-base focus:outline-none w-full placeholder:text-gray-400'
-        value={inputValue}
-        onChange={e => handleInputChange(e.target.value)}
-        onKeyDown={handleKeyDown}
-      />
+    <div className='border-b border-black/10 window-drag' style={{ height: SEARCH_HEIGHT }}>
+      <div className='w-full h-full px-4 py-2 flex items-center gap-3'>
+        {selectedPlugin ? (
+          <>
+            <button
+              onClick={onPluginClose}
+              className='p-1 hover:bg-black/5 rounded-md transition-colors window-no-drag'
+            >
+              <ArrowLeft className='w-4 h-4 text-gray-600' />
+            </button>
+            <PluginIndicator plugin={selectedPlugin} onClose={onPluginClose} />
+          </>
+        ) : (
+          <Search className='w-4 h-4 text-gray-400 flex-shrink-0' />
+        )}
+
+        <input
+          ref={inputRef}
+          type='text'
+          placeholder={selectedPlugin ? 'Type a command...' : 'Search for apps and commands...'}
+          className='flex-1 text-gray-900 placeholder-gray-500 bg-transparent border-none outline-none window-no-drag'
+          value={inputValue}
+          onChange={e => handleInputChange(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onBlur={handleInputBlur}
+        />
+      </div>
     </div>
   );
-} 
+}

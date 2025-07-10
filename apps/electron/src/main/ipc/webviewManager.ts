@@ -60,8 +60,8 @@ const createWebview = (
       webview.webContents.setUserAgent(params.options.userAgent);
     }
 
-    // 设置边框圆角
     webview.setBorderRadius(params.borderRadius ?? 0);
+    webview.setBackgroundColor(params.backgroundColor ?? '#00000000');
 
     // 加载URL
     webview.webContents.loadURL(params.url);

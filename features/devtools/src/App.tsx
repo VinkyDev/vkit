@@ -35,7 +35,7 @@ function App() {
       if (result.success) {
         setWebviewCreated(true);
         setCurrentUrl(url);
-        setDevToolsEnabled(false); // 重置开发者工具状态
+        setDevToolsEnabled(false);
       } else {
         throw new Error(result.error ?? 'Failed to create webview');
       }
@@ -74,7 +74,7 @@ function App() {
   }, [webviewCreated]);
 
   return (
-    <div className='h-full w-full flex flex-col bg-gray-50'>
+    <div className='h-full w-full flex flex-col'>
       <WebviewContainer hasWebview={webviewCreated} onLoadUrl={handleLoadUrl} />
 
       {webviewCreated && (
