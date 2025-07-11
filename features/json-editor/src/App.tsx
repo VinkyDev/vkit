@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import JSONEditor from './components/JSONEditor';
-import { getPluginInitData } from '@vkit/api';
+import { getPluginInitData, getStoreValue, setStoreValue } from '@vkit/api';
 import { formatJSON, isValidJSON } from '@vkit/utils';
 
 interface PluginContext {
@@ -20,12 +20,19 @@ function App() {
       } else {
         setJsonValue(context.content);
       }
+    } else {
+      getStoreValue<string>({ key: 'json-editor' }).then(result => {
+        if (result.success) {
+          setJsonValue(formatJSON(result.data ?? '{}'));
+        }
+      });
     }
   }, []);
 
   // 处理JSON值变化
   const handleJSONChange = (newValue: string) => {
     setJsonValue(newValue);
+    setStoreValue({ key: 'json-editor', value: newValue });
   };
 
   return (

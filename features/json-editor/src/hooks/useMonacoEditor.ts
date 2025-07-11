@@ -18,7 +18,7 @@ export interface UseMonacoEditorProps {
 }
 
 export interface UseMonacoEditorReturn {
-  editorRef: React.MutableRefObject<monaco.editor.IStandaloneCodeEditor | null>;
+  editorRef: React.RefObject<monaco.editor.IStandaloneCodeEditor | null>;
   handleEditorDidMount: OnMount;
   formatCurrentJSON: () => void;
   minifyCurrentJSON: () => void;

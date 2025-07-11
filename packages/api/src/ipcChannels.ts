@@ -34,4 +34,17 @@ export const IpcChannels = {
   WEBVIEW_SET_BOUNDS: 'webview-set-bounds',
   WEBVIEW_SET_VISIBLE: 'webview-set-visible',
   WEBVIEW_EXECUTE_JAVASCRIPT: 'webview-execute-javascript',
+
+  // Store 存储服务相关事件
+  STORE_SET: 'store-set',
+  STORE_GET: 'store-get',
+  STORE_DELETE: 'store-delete',
+  STORE_HAS: 'store-has',
+  STORE_CLEAR: 'store-clear',
+  STORE_GET_KEYS: 'store-get-keys',
+  STORE_SET_MANY: 'store-set-many',
+  STORE_GET_MANY: 'store-get-many',
+  STORE_GET_SIZE: 'store-get-size',
+  STORE_GET_STATS: 'store-get-stats',
+  STORE_SYNC: 'store-sync',
 } as const;

@@ -104,6 +104,9 @@ const JSONEditor = ({
         onMount={handleEditorDidMountWithFocus}
         options={{
           automaticLayout: true,
+          stickyScroll: {
+            enabled: false,
+          },
         }}
       />
     </div>

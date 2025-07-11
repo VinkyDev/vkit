@@ -55,5 +55,4 @@ class JsonEditorPlugin implements IPlugin {
   }
 }
 
-// 导出插件实例
 export default new JsonEditorPlugin();

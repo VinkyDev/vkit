@@ -1,10 +1,10 @@
 import { app, BrowserWindow } from 'electron';
 import { electronApp, optimizer } from '@electron-toolkit/utils';
 import { createMainWindow } from './mainWindow';
-import { setupIpc } from './ipc';
+import { setupIpc, initializeStoreService, destroyStoreService } from './ipc';
 import { initGlobalShortcut, cleanupGlobalShortcut } from './ipc/globalShortcut';
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   electronApp.setAppUserModelId('com.vinky.vkit');
 
   // Default open or close DevTools by F12 in development
@@ -15,6 +15,7 @@ app.whenReady().then(() => {
   });
 
   setupIpc();
+  await initializeStoreService();
   createMainWindow();
   initGlobalShortcut();
 
@@ -25,9 +26,11 @@ app.whenReady().then(() => {
   });
 });
 
-app.on('will-quit', () => {
+app.on('will-quit', async () => {
   // 清理全局快捷键
   cleanupGlobalShortcut();
+  // 销毁store服务
+  await destroyStoreService();
 });
 
 app.on('window-all-closed', () => {
