@@ -3,25 +3,143 @@ export const enum PluginType {
   REMOTE,
 }
 
-export interface IPluginMatchRule {
-  pattern: string; // 正则表达式字符串
-  weight: number; // 匹配权重，越高优先级越高
-  description?: string; // 规则描述
+// ============================================================================
+// 搜索结果相关类型定义 
+// ============================================================================
+
+/**
+ * 搜索结果项 - 插件提供的可搜索内容
+ */
+export interface ISearchResultItem {
+  /** 结果项唯一标识符 */
+  id: string;
+  /** 显示名称 */
+  name: string;
+  /** 图标URL或图标名称 */
+  icon?: string;
+  /** 描述信息 */
+  description?: string;
+  /** 搜索关键词（用于匹配搜索词） */
+  searchTerms: string[];
+  /** 权重，影响搜索排序，默认1 */
+  weight?: number;
+  /** 额外数据，创建视图时会传递给插件 */
+  data?: Record<string, unknown>;
+  /** 提供此结果项的插件ID */
+  pluginId: string;
 }
 
-export interface IPluginManifest {
+/**
+ * 实时搜索结果项 - 用于实时搜索的轻量级结果
+ */
+export interface IInstantSearchResultItem {
+  /** 结果项唯一标识符 */
   id: string;
+  /** 显示名称 */
   name: string;
-  icon: string;
-  version?: string;
+  /** 图标URL或图标名称 */
+  icon?: string;
+  /** 描述信息 */
   description?: string;
-  markdown?: string;
-  entry?: string;
-  type: PluginType;
-  allowSearch?: boolean;
-  matchRules?: IPluginMatchRule[]; // 特殊匹配规则
-  weight?: number; // 基础权重，默认为1
+  /** 权重，影响搜索排序，默认1 */
+  weight?: number;
+  /** 额外数据，创建视图时会传递给插件 */
+  data?: Record<string, unknown>;
+  /** 提供此结果项的插件ID */
+  pluginId: string;
 }
+
+/**
+ * 实时搜索结果集合
+ */
+export interface IInstantSearchResultItems {
+  /** 结果项列表 */
+  items: IInstantSearchResultItem[];
+  /** 是否还有更多结果 */
+  hasMore?: boolean;
+  /** 下一页的token或offset */
+  nextToken?: string;
+}
+
+// ============================================================================
+// 插件接口定义 - 参考Ueli Extension
+// ============================================================================
+
+/**
+ * 插件基础信息
+ */
+export interface IPluginManifest {
+  /** 插件唯一标识符 */
+  id: string;
+  /** 插件名称 */
+  name: string;
+  /** 插件图标 */
+  icon: string;
+  /** 插件版本 */
+  version?: string;
+  /** 插件描述 */
+  description?: string;
+  /** 插件文档 */
+  markdown?: string;
+  /** 插件入口文件 */
+  entry?: string;
+  /** 插件类型 */
+  type: PluginType;
+  /** 是否允许搜索，默认true */
+  allowSearch?: boolean;
+  /** 基础权重，默认为1 */
+  weight?: number;
+}
+
+/**
+ * 插件接口 - 类似Ueli的Extension接口
+ */
+export interface IPlugin {
+  /** 插件基础信息 */
+  readonly manifest: IPluginManifest;
+
+  /**
+   * 获取搜索结果项列表
+   * 此方法在应用启动时、设置更改时或手动触发重新扫描时调用
+   * 由于此方法是异步的，可以进行较重的操作如API请求或文件扫描
+   */
+  getSearchResultItems(): Promise<ISearchResultItem[]>;
+
+  /**
+   * 获取实时搜索结果项
+   * 此方法在每次用户输入变化时调用，应保持轻量级
+   * @param searchTerm 当前搜索词
+   */
+  getInstantSearchResultItems?(searchTerm: string): IInstantSearchResultItems;
+
+  /**
+   * 判断此插件是否在当前系统上受支持
+   * 不受支持的插件不会参与搜索
+   */
+  isSupported(): boolean;
+
+  /**
+   * 获取设置的默认值
+   * @param key 设置键名
+   */
+  getSettingDefaultValue?(key: string): unknown;
+
+  /**
+   * 获取触发重新扫描的设置键列表
+   * 当这些设置发生变化时，会重新调用getSearchResultItems()
+   */
+  getSettingKeysTriggeringRescan?(): string[];
+
+  /**
+   * 自定义调用方法（可选）
+   * 可以通过IPC调用此方法实现自定义功能
+   */
+  invoke?(argument: unknown): Promise<unknown>;
+}
+
+// ============================================================================
+// 现有类型定义保持不变
+// ============================================================================
 
 export interface IWindowSetSizeParams {
   width: number;

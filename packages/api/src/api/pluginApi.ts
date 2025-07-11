@@ -4,7 +4,47 @@ import type {
   ISearchInputChangeEvent,
   ISearchInputEnterEvent,
   IPluginInitData,
+  IPlugin,
+  ISearchResultItem,
+  IInstantSearchResultItems,
 } from '../types';
+
+// ============================================================================
+// 插件系统管理 API
+// ============================================================================
+
+/**
+ * 获取所有插件列表
+ * @returns Promise<IPlugin[]> 插件列表
+ */
+export const getAllPlugins = async (): Promise<IPlugin[]> => {
+  return await window?.electron?.ipcRenderer?.invoke(IpcChannels.GET_ALL_PLUGINS) as IPlugin[];
+};
+
+/**
+ * 获取所有搜索结果项
+ * @returns Promise<ISearchResultItem[]> 搜索结果项列表
+ */
+export const getAllSearchItems = async (): Promise<ISearchResultItem[]> => {
+  return await window?.electron?.ipcRenderer?.invoke(IpcChannels.GET_ALL_SEARCH_ITEMS) as ISearchResultItem[];
+};
+
+/**
+ * 获取实时搜索结果
+ * @param searchTerm 搜索词
+ * @returns Promise<IInstantSearchResultItems> 实时搜索结果
+ */
+export const getInstantSearchResults = async (searchTerm: string): Promise<IInstantSearchResultItems> => {
+  return await window?.electron?.ipcRenderer?.invoke(IpcChannels.GET_INSTANT_SEARCH_RESULTS, searchTerm) as IInstantSearchResultItems;
+};
+
+/**
+ * 刷新插件列表（重新扫描）
+ * @returns Promise<void>
+ */
+export const refreshPlugins = async (): Promise<void> => {
+  await window?.electron?.ipcRenderer?.invoke(IpcChannels.REFRESH_PLUGINS);
+};
 
 // ============================================================================
 // 插件管理 API
@@ -170,30 +210,26 @@ export const removePluginViewClosedListener = (): void => {
 
 /**
  * 从URL参数中获取插件初始化数据
- * @returns 初始化数据对象，如果没有则返回null
+ * @returns 插件上下文数据对象，如果没有则返回null
  *
  * @example
  * ```typescript
  * // 在插件中获取初始化数据
- * const initData = getPluginInitData();
- * if (initData?.initialValue) {
- *   // 设置初始值
- *   setJsonValue(initData.initialValue);
- * }
- * if (initData?.context) {
- *   // 应用上下文配置
- *   applyContext(initData.context);
+ * const context = getPluginInitData();
+ * if (context?.mode) {
+ *   // 根据模式设置编辑器
  * }
  * ```
  */
-export const getPluginInitData = (): IPluginInitData | null => {
+export const getPluginInitData = (): Record<string, any> | null => {
   try {
     const urlParams = new URLSearchParams(window.location.search);
     const initDataParam = urlParams.get('initData');
 
     if (initDataParam) {
       const decodedData = decodeURIComponent(initDataParam);
-      return JSON.parse(decodedData) as IPluginInitData;
+      const parsedData = JSON.parse(decodedData) as IPluginInitData;
+      return parsedData.context ?? null;
     }
 
     return null;
@@ -202,23 +238,13 @@ export const getPluginInitData = (): IPluginInitData | null => {
   }
 };
 
-// ============================================================================
-// 清理监听器 API
-// ============================================================================
-
 /**
- * 移除所有搜索输入相关的监听器
- *
- * 通常在插件卸载时调用以避免内存泄漏
+ * 移除搜索输入事件监听器
  *
  * @example
  * ```typescript
- * // 插件卸载时清理监听器
- * useEffect(() => {
- *   return () => {
- *     removeSearchInputListeners();
- *   };
- * }, []);
+ * // 移除所有搜索输入事件监听器
+ * removeSearchInputListeners();
  * ```
  */
 export const removeSearchInputListeners = (): void => {
@@ -227,21 +253,17 @@ export const removeSearchInputListeners = (): void => {
 };
 
 /**
- * 移除所有插件相关的监听器
+ * 移除所有插件相关的事件监听器
  *
- * 通常在应用卸载时调用以避免内存泄漏
+ * 注意：这会移除所有插件相关的监听器，包括插件视图关闭和搜索输入事件
  *
  * @example
  * ```typescript
- * // 应用卸载时清理所有监听器
- * useEffect(() => {
- *   return () => {
- *     removeAllPluginListeners();
- *   };
- * }, []);
+ * // 在插件卸载时清理所有监听器
+ * removeAllPluginListeners();
  * ```
  */
 export const removeAllPluginListeners = (): void => {
-  removeSearchInputListeners();
   removePluginViewClosedListener();
+  removeSearchInputListeners();
 };

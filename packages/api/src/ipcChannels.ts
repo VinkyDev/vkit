@@ -15,6 +15,12 @@ export const IpcChannels = {
   CLOSE_PLUGIN_VIEW: 'close-plugin-view',
   PLUGIN_VIEW_CLOSED: 'plugin-view-closed',
 
+  // 插件系统管理事件
+  GET_ALL_PLUGINS: 'get-all-plugins',
+  GET_ALL_SEARCH_ITEMS: 'get-all-search-items',
+  GET_INSTANT_SEARCH_RESULTS: 'get-instant-search-results',
+  REFRESH_PLUGINS: 'refresh-plugins',
+
   // 输入框相关事件
   SEARCH_INPUT_CHANGE: 'search-input-change',
   SEARCH_INPUT_ENTER: 'search-input-enter',

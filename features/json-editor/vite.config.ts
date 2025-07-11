@@ -2,15 +2,32 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
+import { build as esbuildBuild } from 'esbuild';
 
-// https://vite.dev/config/
 export default defineConfig({
   base: './',
-  plugins: [react(), tailwindcss()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
+  plugins: [
+    react(),
+    tailwindcss(),
+    {
+      name: 'compile-plugin-config-cjs',
+      apply: 'build',
+      async writeBundle() {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        await esbuildBuild({
+          entryPoints: [path.resolve(__dirname, 'plugin.config.ts')],
+          outfile: path.resolve(__dirname, 'dist', 'plugin.config.cjs'),
+          bundle: true,
+          platform: 'node',
+          format: 'cjs',
+          sourcemap: false,
+          tsconfig: path.resolve(__dirname, 'tsconfig.json'),
+        });
+      },
     },
+  ],
+  resolve: {
+    alias: { '@': path.resolve(__dirname, 'src') },
   },
   server: {
     port: 3000,

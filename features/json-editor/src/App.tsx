@@ -3,17 +3,22 @@ import JSONEditor from './components/JSONEditor';
 import { getPluginInitData } from '@vkit/api';
 import { formatJSON, isValidJSON } from '@vkit/utils';
 
+interface PluginContext {
+  mode?: string;
+  content?: string;
+}
+
 function App() {
   const [jsonValue, setJsonValue] = useState('{}');
 
   // 处理初始化数据
   useEffect(() => {
-    const initData = getPluginInitData();
-    if (initData?.initialValue) {
-      if (isValidJSON(initData.initialValue)) {
-        setJsonValue(formatJSON(initData.initialValue));
+    const context = getPluginInitData() as PluginContext | null;
+    if (context?.mode === 'edit' && context?.content) {
+      if (isValidJSON(context.content)) {
+        setJsonValue(formatJSON(context.content));
       } else {
-        setJsonValue(initData.initialValue);
+        setJsonValue(context.content);
       }
     }
   }, []);
