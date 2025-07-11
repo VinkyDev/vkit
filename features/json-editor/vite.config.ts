@@ -13,7 +13,6 @@ export default defineConfig({
       name: 'compile-plugin-config-cjs',
       apply: 'build',
       async writeBundle() {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         await esbuildBuild({
           entryPoints: [path.resolve(__dirname, 'plugin.config.ts')],
           outfile: path.resolve(__dirname, 'dist', 'plugin.config.cjs'),
