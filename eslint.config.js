@@ -83,9 +83,6 @@ const reactConfig = [
       // React Hooks 规则
       ...reactHooks.configs.recommended.rules,
 
-      // React Refresh 规则
-      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-
       // 禁用不适合React的规则
       'no-undef': 'off', // TypeScript处理
     },

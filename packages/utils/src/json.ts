@@ -91,13 +91,13 @@ export function valueToJSONString(value: string | object, indent: number = 2): s
  * @param jsonString JSON字符串
  * @returns 解析结果，包含成功状态和数据或错误信息
  */
-export function safeParseJSON(jsonString: string): {
+export function safeParseJSON<T = unknown>(jsonString: string): {
   success: boolean;
-  data?: object;
+  data?: T;
   error?: string;
 } {
   try {
-    const data = JSON.parse(jsonString) as object;
+    const data = JSON.parse(jsonString) as T;
     return { success: true, data };
   } catch (error) {
     return {

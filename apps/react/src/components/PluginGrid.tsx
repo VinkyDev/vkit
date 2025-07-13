@@ -1,4 +1,3 @@
-
 import { type SearchResult } from '../utils/search';
 
 interface PluginGridProps {
@@ -19,7 +18,7 @@ export default function PluginGrid({
     if (!('searchTerms' in result.item)) {
       return 'Instant';
     }
-    
+
     // 根据匹配类型显示标签
     switch (result.matchType) {
       case 'searchTerms':
@@ -101,13 +100,6 @@ export default function PluginGrid({
                   >
                     {item.name}
                   </div>
-                  {result.matchedTerm && (
-                    <div className='flex-shrink-0'>
-                      <span className='text-xs px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-medium'>
-                        {result.matchedTerm}
-                      </span>
-                    </div>
-                  )}
                 </div>
                 <div
                   className={`text-xs truncate ${isSelected ? 'text-gray-600' : 'text-gray-500'}`}

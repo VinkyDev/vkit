@@ -39,13 +39,13 @@ const JSONEditor = ({
     validation,
     onFormat: onChange
       ? formatted => {
-          const parseResult = safeParseJSON(formatted);
+          const parseResult = safeParseJSON<object>(formatted);
           onChange(formatted, parseResult.success ? parseResult.data : undefined);
         }
       : undefined,
     onMinify: onChange
       ? minified => {
-          const parseResult = safeParseJSON(minified);
+          const parseResult = safeParseJSON<object>(minified);
           onChange(minified, parseResult.success ? parseResult.data : undefined);
         }
       : undefined,
@@ -70,7 +70,7 @@ const JSONEditor = ({
   const handleEditorChange: OnChange = useCallback(
     newValue => {
       if (newValue !== undefined && onChange) {
-        const parseResult = safeParseJSON(newValue);
+        const parseResult = safeParseJSON<object>(newValue);
         onChange(newValue, parseResult.success ? parseResult.data : undefined);
       }
     },
