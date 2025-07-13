@@ -1,4 +1,5 @@
 import { IpcChannels } from '../ipcChannels';
+import { debounce } from 'lodash-es';
 import type {
   IStoreSetParams,
   IStoreGetParams,
@@ -12,6 +13,9 @@ import type {
   IStoreSize,
   IStoreStats,
 } from '../types';
+
+// 防抖延迟
+const debounceDelay = 1000;
 
 // ============================================================================
 // Store 存储服务 API
@@ -44,12 +48,15 @@ import type {
  * });
  * ```
  */
-export const setStoreValue = async (params: IStoreSetParams): Promise<IStoreOperationResult> => {
-  return (await window?.electron?.ipcRenderer?.invoke(
-    IpcChannels.STORE_SET,
-    params
-  )) as IStoreOperationResult;
-};
+export const setStoreValue = debounce(
+  async (params: IStoreSetParams): Promise<IStoreOperationResult> => {
+    return (await window?.electron?.ipcRenderer?.invoke(
+      IpcChannels.STORE_SET,
+      params
+    )) as IStoreOperationResult;
+  },
+  debounceDelay
+);
 
 /**
  * 获取存储值
@@ -230,14 +237,15 @@ export const clearStore = async (params?: IStoreClearParams): Promise<IStoreOper
  * });
  * ```
  */
-export const setManyStoreValues = async (
-  params: IStoreSetManyParams
-): Promise<IStoreOperationResult> => {
-  return (await window?.electron?.ipcRenderer?.invoke(
-    IpcChannels.STORE_SET_MANY,
-    params
-  )) as IStoreOperationResult;
-};
+export const setManyStoreValues = debounce(
+  async (params: IStoreSetManyParams): Promise<IStoreOperationResult> => {
+    return (await window?.electron?.ipcRenderer?.invoke(
+      IpcChannels.STORE_SET_MANY,
+      params
+    )) as IStoreOperationResult;
+  },
+  debounceDelay
+);
 
 /**
  * 批量获取存储值
@@ -330,8 +338,8 @@ export const getStoreStats = async (): Promise<IStoreOperationResult<IStoreStats
  * }
  * ```
  */
-export const syncStore = async (): Promise<IStoreOperationResult> => {
+export const syncStore = debounce(async (): Promise<IStoreOperationResult> => {
   return (await window?.electron?.ipcRenderer?.invoke(
     IpcChannels.STORE_SYNC
   )) as IStoreOperationResult;
-};
+}, debounceDelay);

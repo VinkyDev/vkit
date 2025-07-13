@@ -8,6 +8,8 @@ interface PluginContext {
   content?: string;
 }
 
+const storeKey = 'json-editor';
+
 function App() {
   const [jsonValue, setJsonValue] = useState('{}');
 
@@ -17,11 +19,13 @@ function App() {
     if (context?.mode === 'edit' && context?.content) {
       if (isValidJSON(context.content)) {
         setJsonValue(formatJSON(context.content));
+        setStoreValue({ key: storeKey, value: context.content });
       } else {
         setJsonValue(context.content);
+        setStoreValue({ key: storeKey, value: context.content });
       }
     } else {
-      getStoreValue<string>({ key: 'json-editor' }).then(result => {
+      getStoreValue<string>({ key: storeKey }).then(result => {
         if (result.success) {
           setJsonValue(formatJSON(result.data ?? '{}'));
         }
@@ -32,7 +36,7 @@ function App() {
   // 处理JSON值变化
   const handleJSONChange = (newValue: string) => {
     setJsonValue(newValue);
-    setStoreValue({ key: 'json-editor', value: newValue });
+    setStoreValue({ key: storeKey, value: newValue });
   };
 
   return (

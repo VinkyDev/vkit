@@ -221,7 +221,7 @@ export const removePluginViewClosedListener = (): void => {
  * }
  * ```
  */
-export const getPluginInitData = (): Record<string, any> | null => {
+export const getPluginInitData = (): Record<string, unknown> | null => {
   try {
     const urlParams = new URLSearchParams(window.location.search);
     const initDataParam = urlParams.get('initData');
