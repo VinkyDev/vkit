@@ -10,24 +10,20 @@ import { PluginType } from '@vkit/api';
 class JsonEditorPlugin implements IPlugin {
   readonly manifest: IPluginManifest = {
     id: 'json-editor',
-    name: 'JSON 编辑器',
-    icon: 'https://i.imgs.ovh/2025/07/09/6slFe.png',
+    name: 'JSON',
+    icon: 'https://api.iconify.design/logos:json-schema-icon.svg',
     version: '1.0.0',
-    description: 'JSON 编辑器',
+    description: '简洁,现代的JSON编辑器',
     entry: 'index.html',
-    type: PluginType.BUILTIN,
-    weight: 10,
+    type: PluginType.PLUGIN,
   };
 
   getSearchResultItems(): Promise<ISearchResultItem[]> {
     return Promise.resolve([
       {
-        id: 'json-editor',
-        name: 'JSON 编辑器',
-        icon: this.manifest.icon,
+        ...this.manifest,
         searchTerms: [],
-        weight: 15,
-        pluginId: this.manifest.id,
+        pluginId: 'json-editor-main',
       },
     ]);
   }
@@ -37,12 +33,9 @@ class JsonEditorPlugin implements IPlugin {
     const term = searchTerm.toLowerCase();
     if (term.includes('{') || term.includes('[')) {
       items.push({
-        id: 'json-editor-instant',
+        ...this.manifest,
         name: `编辑 JSON: ${searchTerm.substring(0, 10)}...`,
-        icon: this.manifest.icon,
-        description: '在JSON编辑器中打开',
-        weight: 20,
-        pluginId: this.manifest.id,
+        pluginId: 'json-editor-instant',
         data: { mode: 'edit', content: searchTerm },
       });
     }

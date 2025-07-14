@@ -51,7 +51,7 @@ export interface FilterCounts {
 
 export interface QuickAddData {
   mode: 'quick-add';
-  name: string;
+  task: string;
   description?: string;
 }
 

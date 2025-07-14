@@ -5,22 +5,19 @@ class DevToolsPlugin implements IPlugin {
   readonly manifest: IPluginManifest = {
     id: 'devtools',
     name: '开发者工具',
-    icon: 'https://i.imgs.ovh/2025/07/09/6sEBh.png',
+    icon: 'https://api.iconify.design/logos:web-dev-icon.svg',
     version: '1.0.0',
-    description: 'DevTools插件',
+    description: '开发Vkit插件',
     entry: 'index.html',
-    type: PluginType.BUILTIN,
+    type: PluginType.PLUGIN,
   };
 
   getSearchResultItems(): Promise<ISearchResultItem[]> {
     return Promise.resolve([
       {
-        id: 'devtools',
-        name: '开发者工具',
-        icon: this.manifest.icon,
-        description: '开发Vkit插件',
+        ...this.manifest,
+        pluginId: 'devtools-main',
         searchTerms: [],
-        pluginId: this.manifest.id,
       },
     ]);
   }

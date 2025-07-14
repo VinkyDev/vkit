@@ -50,6 +50,8 @@ export const TaskDrawer: React.FC<TaskDrawerProps> = ({
 }) => {
   const { addTodo, updateTodo, deleteTodo, toggleTodo, todos } = useTodoStore();
 
+  const [composition, setComposition] = useState(false);
+
   // 任务状态文字映射
   const statusLabels = {
     overdue: '逾期',
@@ -194,6 +196,13 @@ export const TaskDrawer: React.FC<TaskDrawerProps> = ({
               value={formData.name}
               onChange={e => updateFormData('name', e.target.value)}
               placeholder='输入任务名称'
+              onCompositionStart={() => setComposition(true)}
+              onCompositionEnd={() => setComposition(false)}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && !composition) {
+                  handleSave();
+                }
+              }}
               autoFocus
             />
           </div>

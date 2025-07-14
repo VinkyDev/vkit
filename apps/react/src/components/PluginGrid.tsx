@@ -1,3 +1,4 @@
+import { PluginType } from '@vkit/api';
 import { type SearchResult } from '../utils/search';
 
 interface PluginGridProps {
@@ -13,25 +14,6 @@ export default function PluginGrid({
   searchQuery,
   selectedIndex = -1,
 }: PluginGridProps) {
-  const getItemTypeLabel = (result: SearchResult) => {
-    // 检查是否是实时搜索结果（没有searchTerms字段）
-    if (!('searchTerms' in result.item)) {
-      return 'Instant';
-    }
-
-    // 根据匹配类型显示标签
-    switch (result.matchType) {
-      case 'searchTerms':
-        return 'Match';
-      case 'pinyin':
-        return 'Pinyin';
-      case 'description':
-        return 'Desc';
-      default:
-        return 'Name';
-    }
-  };
-
   if (searchResults.length === 0 && searchQuery?.trim()) {
     return (
       <div className='flex flex-col items-center justify-center py-16 px-8'>
@@ -116,7 +98,7 @@ export default function PluginGrid({
                     ${isSelected ? 'bg-black/10 text-gray-700' : 'bg-black/5 text-gray-600'}
                   `}
                 >
-                  {getItemTypeLabel(result)}
+                  {result.item.type === PluginType.PLUGIN ? '插件' : '命令'}
                 </span>
               </div>
             </div>

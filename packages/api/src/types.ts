@@ -1,10 +1,12 @@
 export const enum PluginType {
-  BUILTIN,
-  REMOTE,
+  /** 插件 */
+  PLUGIN,
+  /** 命令 */
+  COMMAND,
 }
 
 // ============================================================================
-// 搜索结果相关类型定义 
+// 搜索结果相关类型定义
 // ============================================================================
 
 /**
@@ -27,6 +29,8 @@ export interface ISearchResultItem {
   data?: Record<string, unknown>;
   /** 提供此结果项的插件ID */
   pluginId: string;
+  /** 类型 */
+  type: PluginType;
 }
 
 /**
@@ -47,6 +51,8 @@ export interface IInstantSearchResultItem {
   data?: Record<string, unknown>;
   /** 提供此结果项的插件ID */
   pluginId: string;
+  /** 类型 */
+  type: PluginType;
 }
 
 /**
@@ -81,6 +87,10 @@ export interface IPluginManifest {
   description?: string;
   /** 插件文档 */
   markdown?: string;
+  /** 插件作者 */
+  author?: string;
+  /** 搜索输入框的placeholder */
+  searchInputPlaceholder?: string;
   /** 插件入口文件 */
   entry?: string;
   /** 插件类型 */

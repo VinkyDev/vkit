@@ -30,7 +30,6 @@ function App() {
   // 初始化插件数据
   usePluginInitData();
 
-
   // 简单的初始化加载状态
   useEffect(() => {
     // 给persist插件一点时间来加载状态

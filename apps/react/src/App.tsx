@@ -91,10 +91,9 @@ export default function App() {
   // 处理项目选择
   const handleItemSelect = useCallback(
     (result: SearchResult) => {
-      const plugin = plugins.find(p => p.manifest.id === result.item.pluginId);
+      const plugin = plugins.find(p => result.item.pluginId.includes(p.manifest.id));
       if (!plugin) return;
 
-      // 构建初始化数据，将搜索值合并到data中
       const initData: IPluginInitData = {
         context: {
           ...result.item.data,
@@ -146,7 +145,7 @@ export default function App() {
   usePluginViewClose(() => setSelectedPlugin(null));
 
   return (
-    <div className='w-full h-screen flex flex-col bg-transparent'>
+    <div className='w-full h-screen flex flex-col bg-white/75'>
       <SearchBar
         inputValue={inputValue}
         onInputChange={setInputValue}

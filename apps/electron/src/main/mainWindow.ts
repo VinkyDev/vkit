@@ -65,7 +65,7 @@ export function createMainWindow(): void {
     maximizable: false,
     minimizable: false,
     fullscreenable: false,
-    backgroundColor: '#00000000',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,

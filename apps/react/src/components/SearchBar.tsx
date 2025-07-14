@@ -75,7 +75,7 @@ export default function SearchBar({
         <input
           ref={inputRef}
           type='text'
-          placeholder={selectedPlugin ? 'Type a command...' : 'Search for apps and commands...'}
+          placeholder={selectedPlugin ? selectedPlugin.searchInputPlaceholder : '搜索插件...'}
           className='flex-1 text-gray-900 placeholder-gray-500 bg-transparent border-none outline-none window-no-drag'
           value={inputValue}
           onChange={e => handleInputChange(e.target.value)}

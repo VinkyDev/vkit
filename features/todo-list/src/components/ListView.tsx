@@ -43,7 +43,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onClick }) => {
     <div
       className={cn(
         'flex items-center gap-3 p-3 border rounded-lg transition-colors cursor-pointer group',
-        todo.completed ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-200 hover:bg-gray-50'
+        todo.completed ? 'bg-white/15 border-gray-200' : 'bg-white/20 border-gray-200 hover:bg-white/40'
       )}
       onClick={handleRowClick}
     >
@@ -121,7 +121,7 @@ const TaskSection: React.FC<TaskSectionProps> = ({
     <div className='space-y-2'>
       <button
         onClick={onToggleCollapse}
-        className='flex items-center gap-2 w-full text-left p-2 rounded-lg hover:bg-gray-50 transition-colors group'
+        className='flex items-center gap-2 w-full text-left p-2 rounded-lg hover:bg-white/40 transition-colors group'
       >
         <div className={cn('p-1.5 rounded-md', color)}>{icon}</div>
         <div className='flex-1'>

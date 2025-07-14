@@ -13,10 +13,9 @@ export const usePluginInitData = () => {
   useEffect(() => {
     const context = getPluginInitData() as QuickAddData | null;
     setInitData(context);
-
     // 如果是快速添加模式，直接添加任务
-    if (context?.mode === 'quick-add' && context?.name) {
-      addTodo(context.name, 'medium', context.description);
+    if (context?.mode === 'quick-add' && context?.task) {
+      addTodo(context.task, 'medium', context.description);
     }
   }, [addTodo]);
 
