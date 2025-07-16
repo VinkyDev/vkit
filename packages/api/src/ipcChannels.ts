@@ -47,4 +47,12 @@ export const IpcChannels = {
   STORE_GET_SIZE: 'store-get-size',
   STORE_GET_STATS: 'store-get-stats',
   STORE_SYNC: 'store-sync',
+
+  // Clipboard 剪切板服务相关事件
+  CLIPBOARD_GET_HISTORY: 'clipboard-get-history',
+  CLIPBOARD_DELETE_HISTORY: 'clipboard-delete-history',
+  CLIPBOARD_UPDATE_HISTORY: 'clipboard-update-history',
+  CLIPBOARD_TOGGLE_FAVORITE: 'clipboard-toggle-favorite',
+  CLIPBOARD_DELETE_ALL_HISTORY: 'clipboard-delete-all-history',
+  CLIPBOARD_CHANGED: 'clipboard-changed',
 } as const;

@@ -1,7 +1,13 @@
 import { app, BrowserWindow } from 'electron';
 import { electronApp, optimizer } from '@electron-toolkit/utils';
 import { createMainWindow } from './mainWindow';
-import { setupIpc, initializeStoreService, destroyStoreService } from './ipc';
+import {
+  setupIpc,
+  initializeStoreService,
+  destroyStoreService,
+  initializeClipboardService,
+  destroyClipboardService,
+} from './ipc';
 import { initGlobalShortcut, cleanupGlobalShortcut } from './ipc/globalShortcut';
 
 app.whenReady().then(async () => {
@@ -14,22 +20,22 @@ app.whenReady().then(async () => {
     optimizer.watchWindowShortcuts(window);
   });
 
-  setupIpc();
-  await initializeStoreService();
-  createMainWindow();
-  initGlobalShortcut();
-
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
   });
+
+  setupIpc();
+  await initializeStoreService();
+  initializeClipboardService();
+  createMainWindow();
+  initGlobalShortcut();
 });
 
 app.on('will-quit', async () => {
-  // 清理全局快捷键
   cleanupGlobalShortcut();
-  // 销毁store服务
+  destroyClipboardService();
   await destroyStoreService();
 });
 

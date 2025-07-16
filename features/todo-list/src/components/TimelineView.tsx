@@ -3,6 +3,7 @@ import { Plus } from 'lucide-react';
 import { useTodoStore, useTimelineTodos, getTaskStatus } from '../store/useTodoStore';
 import { cn } from '@vkit/utils';
 import type { MonthGanttTask, Todo } from '../types';
+import { ScrollArea } from './ui/scroll-area';
 
 interface DragState {
   isDragging: boolean;
@@ -345,7 +346,7 @@ export const TimelineView: React.FC<TimelineViewProps> = ({ setTaskDrawer }) => 
           </div>
 
           {/* 月历甘特图 */}
-          <div className='flex-1 overflow-auto'>
+          <ScrollArea className='flex-1'>
             <div ref={timelineRef} className='relative'>
               {/* 背景日期网格 */}
               {Array.from({ length: 6 }, (_, weekIndex) => (
@@ -450,7 +451,7 @@ export const TimelineView: React.FC<TimelineViewProps> = ({ setTaskDrawer }) => 
                 </div>
               ))}
             </div>
-          </div>
+          </ScrollArea>
         </div>
       </div>
     </div>

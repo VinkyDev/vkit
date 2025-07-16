@@ -25,7 +25,6 @@ export class StoreService {
   private store: Map<string, unknown> = new Map();
   private storePath: string;
   private lastSyncTime: number = 0;
-  private autoSyncTimer: NodeJS.Timeout | null = null;
   private isDirty: boolean = false;
 
   constructor() {
@@ -46,22 +45,13 @@ export class StoreService {
    * 初始化存储服务
    */
   public async initialize(): Promise<void> {
-    try {
-      await this.loadFromDisk();
-      this.startAutoSync();
-    } catch (error) {
-      console.error('Failed to initialize store service:', error);
-    }
+    await this.loadFromDisk();
   }
 
   /**
    * 销毁存储服务
    */
   public async destroy(): Promise<void> {
-    if (this.autoSyncTimer) {
-      clearInterval(this.autoSyncTimer);
-      this.autoSyncTimer = null;
-    }
     if (this.isDirty) {
       await this.syncToDisk();
     }
@@ -91,14 +81,14 @@ export class StoreService {
   /**
    * 获取存储值
    */
-  public get(params: IStoreGetParams): IStoreOperationResult {
+  public get<T = unknown>(params: IStoreGetParams): IStoreOperationResult<T> {
     try {
       const value = this.store.get(params.key);
       const result = value !== undefined ? value : params.defaultValue;
 
       return {
         success: true,
-        data: result,
+        data: result as T,
       };
     } catch (error) {
       return {
@@ -380,22 +370,6 @@ export class StoreService {
    */
   private markDirty(): void {
     this.isDirty = true;
-  }
-
-  /**
-   * 启动自动同步
-   */
-  private startAutoSync(): void {
-    // 每5秒检查一次是否需要同步
-    this.autoSyncTimer = setInterval(async () => {
-      if (this.isDirty) {
-        try {
-          await this.syncToDisk();
-        } catch (error) {
-          console.error('Auto sync failed:', error);
-        }
-      }
-    }, 5000);
   }
 }
 

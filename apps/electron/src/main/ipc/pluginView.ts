@@ -124,3 +124,7 @@ export const setupPluginView = () => {
   ipcMain.handle(IpcChannels.SEARCH_INPUT_CHANGE, handleSearchInputChange);
   ipcMain.handle(IpcChannels.SEARCH_INPUT_ENTER, handleSearchInputEnter);
 };
+
+export const getPluginView = () => {
+  return pluginView;
+};

@@ -6,6 +6,7 @@ import { formatDateDisplay } from '@vkit/utils';
 import { cn } from '@vkit/utils';
 import type { Todo } from '../types';
 import { EmptyState } from './EmptyState';
+import { ScrollArea } from './ui/scroll-area';
 
 interface TaskDrawerState {
   isOpen: boolean;
@@ -43,7 +44,9 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onClick }) => {
     <div
       className={cn(
         'flex items-center gap-3 p-3 border rounded-lg transition-colors cursor-pointer group',
-        todo.completed ? 'bg-white/15 border-gray-200' : 'bg-white/20 border-gray-200 hover:bg-white/40'
+        todo.completed
+          ? 'bg-white/15 border-gray-200'
+          : 'bg-white/20 border-gray-200 hover:bg-white/40'
       )}
       onClick={handleRowClick}
     >
@@ -190,55 +193,52 @@ export const ListView: React.FC<ListViewProps> = ({ setTaskDrawer }) => {
   }
 
   return (
-    <div className='h-full flex flex-col'>
-      {/* 任务列表 */}
-      <div className='flex-1 overflow-y-auto'>
-        <div className='p-4 space-y-4'>
-          <TaskSection
-            title='逾期任务'
-            icon={<AlertTriangle className='w-5 h-5 text-white' />}
-            count={tasksByStatus.overdue.length}
-            todos={tasksByStatus.overdue}
-            color='bg-red-500'
-            isCollapsed={collapsedSections.has('overdue')}
-            onToggleCollapse={() => toggleSection('overdue')}
-            onTodoClick={handleTodoClick}
-          />
+    <ScrollArea className='h-full'>
+      <div className='p-4 space-y-4'>
+        <TaskSection
+          title='逾期任务'
+          icon={<AlertTriangle className='w-5 h-5 text-white' />}
+          count={tasksByStatus.overdue.length}
+          todos={tasksByStatus.overdue}
+          color='bg-red-500'
+          isCollapsed={collapsedSections.has('overdue')}
+          onToggleCollapse={() => toggleSection('overdue')}
+          onTodoClick={handleTodoClick}
+        />
 
-          <TaskSection
-            title='进行中'
-            icon={<Circle className='w-5 h-5 text-white' />}
-            count={tasksByStatus.inProgress.length}
-            todos={tasksByStatus.inProgress}
-            color='bg-blue-500'
-            isCollapsed={collapsedSections.has('inProgress')}
-            onToggleCollapse={() => toggleSection('inProgress')}
-            onTodoClick={handleTodoClick}
-          />
+        <TaskSection
+          title='进行中'
+          icon={<Circle className='w-5 h-5 text-white' />}
+          count={tasksByStatus.inProgress.length}
+          todos={tasksByStatus.inProgress}
+          color='bg-blue-500'
+          isCollapsed={collapsedSections.has('inProgress')}
+          onToggleCollapse={() => toggleSection('inProgress')}
+          onTodoClick={handleTodoClick}
+        />
 
-          <TaskSection
-            title='未开始'
-            icon={<Circle className='w-5 h-5 text-white' />}
-            count={tasksByStatus.notStarted.length}
-            todos={tasksByStatus.notStarted}
-            color='bg-gray-500'
-            isCollapsed={collapsedSections.has('notStarted')}
-            onToggleCollapse={() => toggleSection('notStarted')}
-            onTodoClick={handleTodoClick}
-          />
+        <TaskSection
+          title='未开始'
+          icon={<Circle className='w-5 h-5 text-white' />}
+          count={tasksByStatus.notStarted.length}
+          todos={tasksByStatus.notStarted}
+          color='bg-gray-500'
+          isCollapsed={collapsedSections.has('notStarted')}
+          onToggleCollapse={() => toggleSection('notStarted')}
+          onTodoClick={handleTodoClick}
+        />
 
-          <TaskSection
-            title='已完成'
-            icon={<CheckCircle2 className='w-5 h-5 text-white' />}
-            count={tasksByStatus.completed.length}
-            todos={tasksByStatus.completed}
-            color='bg-green-500'
-            isCollapsed={collapsedSections.has('completed')}
-            onToggleCollapse={() => toggleSection('completed')}
-            onTodoClick={handleTodoClick}
-          />
-        </div>
+        <TaskSection
+          title='已完成'
+          icon={<CheckCircle2 className='w-5 h-5 text-white' />}
+          count={tasksByStatus.completed.length}
+          todos={tasksByStatus.completed}
+          color='bg-green-500'
+          isCollapsed={collapsedSections.has('completed')}
+          onToggleCollapse={() => toggleSection('completed')}
+          onTodoClick={handleTodoClick}
+        />
       </div>
-    </div>
+    </ScrollArea>
   );
 };
