@@ -6,6 +6,7 @@ import { setupLogger } from './logger';
 import { setupGlobalShortcut } from './globalShortcut';
 import { setupStoreIpc, initializeStoreService, destroyStoreService } from './store';
 import { setupClipboardIpc, initializeClipboardService, destroyClipboardService } from './clipboard';
+// import { setupApplicationIpc, initializeApplicationService, destroyApplicationService } from './application';
 
 export const setupIpc = () => {
   setupWindow();
@@ -16,8 +17,10 @@ export const setupIpc = () => {
   setupGlobalShortcut();
   setupStoreIpc();
   setupClipboardIpc();
+  // setupApplicationIpc();
 };
 
 // 导出服务管理函数
 export { initializeStoreService, destroyStoreService };
 export { initializeClipboardService, destroyClipboardService };
+// export { initializeApplicationService, destroyApplicationService };

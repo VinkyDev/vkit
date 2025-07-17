@@ -22,24 +22,22 @@ export default function App() {
   const [plugins, setPlugins] = useState<IPlugin[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const loadData = async () => {
+    try {
+      const [pluginList, allItems] = await Promise.all([getAllPlugins(), getSearchItemsFromIPC()]);
+      setPlugins(pluginList);
+      setCachedSearchItems(allItems);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // 初始化数据加载
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const [pluginList, allItems] = await Promise.all([
-          getAllPlugins(),
-          getSearchItemsFromIPC(),
-        ]);
-        setPlugins(pluginList);
-        setCachedSearchItems(allItems);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     loadData();
   }, []);
 
-  // 计算搜索结果（使用useMemo优化性能）
+  // 计算搜索结果
   const searchResults = useMemo<SearchResult[]>(() => {
     if (!inputValue.trim()) {
       return cachedSearchItems.slice(0, 6).map(item => ({

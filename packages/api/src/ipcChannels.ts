@@ -55,4 +55,14 @@ export const IpcChannels = {
   CLIPBOARD_TOGGLE_FAVORITE: 'clipboard-toggle-favorite',
   CLIPBOARD_DELETE_ALL_HISTORY: 'clipboard-delete-all-history',
   CLIPBOARD_CHANGED: 'clipboard-changed',
+
+  // Application 应用程序搜索服务相关事件
+  APPLICATION_SCAN: 'application-scan',
+  APPLICATION_SEARCH: 'application-search',
+  APPLICATION_GET_ALL: 'application-get-all',
+  APPLICATION_LAUNCH: 'application-launch',
+  APPLICATION_GET_CONFIG: 'application-get-config',
+  APPLICATION_UPDATE_CONFIG: 'application-update-config',
+  APPLICATION_REFRESH: 'application-refresh',
+  APPLICATION_SCAN_PROGRESS: 'application-scan-progress',
 } as const;
