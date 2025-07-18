@@ -65,4 +65,14 @@ export const IpcChannels = {
   APPLICATION_UPDATE_CONFIG: 'application-update-config',
   APPLICATION_REFRESH: 'application-refresh',
   APPLICATION_SCAN_PROGRESS: 'application-scan-progress',
+
+  // AI Chat 聊天服务相关事件
+  CHAT_GET_MODELS: 'chat-get-models',
+  CHAT_START: 'chat-start',
+  CHAT_STREAM_DATA: 'chat-stream-data',
+  CHAT_TOOL_CALLS_DETECTED: 'chat-tool-calls-detected',
+  CHAT_TOOL_CALLED: 'chat-tool-called',
+  CHAT_TOOL_ERROR: 'chat-tool-error',
+  CHAT_COMPLETED: 'chat-completed',
+  CHAT_ERROR: 'chat-error',
 } as const;

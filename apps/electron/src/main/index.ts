@@ -7,6 +7,7 @@ import {
   destroyStoreService,
   initializeClipboardService,
   destroyClipboardService,
+  destroyChatService,
 } from './ipc';
 import { initGlobalShortcut, cleanupGlobalShortcut } from './ipc/globalShortcut';
 
@@ -29,12 +30,14 @@ app.whenReady().then(async () => {
   setupIpc();
   await initializeStoreService();
   initializeClipboardService();
+
   createMainWindow();
   initGlobalShortcut();
 });
 
 app.on('will-quit', async () => {
   cleanupGlobalShortcut();
+  destroyChatService();
   destroyClipboardService();
   await destroyStoreService();
 });

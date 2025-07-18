@@ -21,7 +21,9 @@
   },
   "dependencies": {
     "@electron-toolkit/utils": "^4.0.0",
-    "electron-updater": "^6.3.9"
+    "@modelcontextprotocol/sdk": "^1.15.1",
+    "electron-updater": "^6.3.9",
+    "openai": "^5.10.1"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
