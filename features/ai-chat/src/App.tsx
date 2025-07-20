@@ -44,7 +44,7 @@ function ChatComponent() {
         ))}
 
         {/* 显示正在流式接收的内容 */}
-        {loading && streamingContent && (
+        {streamingContent && (
           <div className='message assistant streaming'>
             <strong>assistant:</strong> {streamingContent}
           </div>

@@ -72,7 +72,8 @@ export const useChat = (options: UseChatOptions = {}): UseChatReturn => {
         setState(prev => {
           let newStreamingContent = prev.streamingContent;
           event.toolCalls.forEach(toolCall => {
-            newStreamingContent += `<toolCall loading="true" name="${toolCall.function.name}" arguments="${toolCall.function.arguments}" />`;
+            const { name, arguments: args } = toolCall.function;
+            newStreamingContent += `<toolCall loading="true" name="${name}" arguments="${btoa(args)}" />`;
           });
           return {
             ...prev,
@@ -88,7 +89,6 @@ export const useChat = (options: UseChatOptions = {}): UseChatReturn => {
     (event: IToolCalledEvent) => {
       if (state.currentSessionId === event.sessionId) {
         setState(prev => {
-          // 用正则找到最后一个 loading=true 的 <toolCall />
           const regex = /<toolCall loading="true" name="([^"]*)" arguments="([^"]*)" \/>/g;
           let match;
           let lastIndex = -1;
@@ -125,6 +125,10 @@ export const useChat = (options: UseChatOptions = {}): UseChatReturn => {
           streamingContent: '',
         }));
         onComplete?.(finalContent);
+        setState(prev => ({
+          ...prev,
+          loading: false,
+        }));
       }
     },
     [state.currentSessionId, state.streamingContent, onComplete]
@@ -181,12 +185,10 @@ export const useChat = (options: UseChatOptions = {}): UseChatReturn => {
           setState(prev => ({
             ...prev,
             currentSessionId: result.data?.sessionId ?? null,
-            loading: false,
           }));
         } else {
           setState(prev => ({
             ...prev,
-            loading: false,
             error: result.error ?? '启动聊天失败',
           }));
         }
